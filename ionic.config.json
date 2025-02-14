@@ -1,0 +1,7 @@
+{
+  "name": "mechanical-workshop-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
