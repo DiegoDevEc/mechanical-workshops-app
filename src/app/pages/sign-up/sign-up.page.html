@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Regístrate ahora</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-img class="logo" src="../../../assets/image.png" alt="Logo de la empresa"></ion-img>
+
+  <div class="text-subtitle">
+    <p>Por favor complete los datos y cree una cuenta.</p>
+  </div>
+
+  <form [formGroup]="signupForm" (ngSubmit)="register()">
+    <div class="login-container">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input type="text" formControlName="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Apellido</ion-label>
+        <ion-input type="text" formControlName="lastName"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Cédula</ion-label>
+        <ion-input type="text" formControlName="identification"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Número de teléfono</ion-label>
+        <ion-input
+          type="tel"
+          formControlName="phone"
+          (ionBlur)="validatePhone()"
+        ></ion-input>
+        <ion-note *ngIf="signupForm.get('phone')?.errors?.['phoneRegistered']" color="danger">
+          El número de teléfono ya está registrado.
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-input type="text" formControlName="address"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" type="submit" [disabled]="signupForm.invalid">
+        Registrarse
+      </ion-button>
+
+      <ion-button expand="block" color="secondary" (click)="cancel()">
+        Cancelar
+      </ion-button>
+    </div>
+  </form>
+</ion-content>
