@@ -2,6 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
+import { lastValueFrom, Observable } from 'rxjs';
+import { UserService } from 'src/app/core/services/api/user.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,13 +13,16 @@ import { NavController } from '@ionic/angular';
 })
 export class SignUpPage implements OnInit {
   signupForm: FormGroup;
-  isPhoneRegistered: boolean = false;
+
+  isProblemServer = false;
 
   constructor(
+    private httpUser: UserService,
     private navCtrl: NavController,
     private fb: FormBuilder
   ) {
     this.signupForm = this.fb.group({
+      username: ['', Validators.required],
       name: ['', Validators.required],
       lastName: ['', Validators.required],
       identification: ['', Validators.required],
@@ -25,45 +30,66 @@ export class SignUpPage implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       address: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
-    });}
+    });
+  }
 
   ngOnInit(): void {
   }
 
-  async validatePhone() {
-    console.log('Validando número de teléfono...');
+  async validateField(
+    fieldName: 'phone' | 'identification' | 'email' | 'username',
+    checkFunction: (value: string) => Promise<boolean>
+  ) {
+    const control = this.signupForm.get(fieldName);
 
-    const phoneControl = this.signupForm.get('phone');
-    console.log('Número de teléfono Caaaaaa:', phoneControl?.valid);
+    if (control?.valid) {
+      const value = control.value;
 
-    if (phoneControl?.valid) {
-      console.log('Número de teléfono Validddddd:', phoneControl);
-      const phone = phoneControl.value;
-      this.isPhoneRegistered = await this.checkPhoneNumber(phone);
-      console.log('Número de teléfono:', phone);
+      this.isProblemServer = false;
 
-      console.log('¿El número de teléfono está registrado?', this.isPhoneRegistered);
-
-      if (this.isPhoneRegistered) {
-        phoneControl.setErrors({ phoneRegistered: true }); // Marca el campo como inválido
-      }
+      const isRegistered = await checkFunction(value);
+      control.setErrors({ [`${fieldName}Registered`]: isRegistered, serverError: this.isProblemServer });
     }
   }
 
-  async checkPhoneNumber(phone: string) {
-    return true;
-    /*try {
-      const response = await this.http
-        .post<{ exists: boolean }>('https://your-backend-api.com/check-phone', { phone })
-        .toPromise();
-      return response.exists;
-    } catch (error) {
-      console.error('Error checking phone number:', error);
+
+  async checkIfRegistered(
+    endpoint: (value: string, extraParam: any) => Observable<any>,
+    value: string
+  ): Promise<boolean> {
+    try {
+      if (!value) {
+        return true;
+      }
+      const response = await lastValueFrom(endpoint(value, undefined));
       return false;
-    }*/
+    } catch (error: any) {
+      if (error.status === 0 || error.status === 404) {
+        this.isProblemServer = true;
+        return false;
+      }
+      return true;
+    }
+  }
+
+  async validatePhone() {
+    await this.validateField('phone', (phone) => this.checkIfRegistered(this.httpUser.checkPhoneNumber.bind(this.httpUser), phone));
+  }
+
+  async validateIdentification() {
+    await this.validateField('identification', (identification) => this.checkIfRegistered(this.httpUser.checkIdentification.bind(this.httpUser), identification));
+  }
+
+  async validateEmail() {
+    await this.validateField('email', (email) => this.checkIfRegistered(this.httpUser.checkIdentification.bind(this.httpUser), email));
+  }
+
+  async validateUsername() {
+    await this.validateField('username', (username) => this.checkIfRegistered(this.httpUser.checkIdentification.bind(this.httpUser), username));
   }
 
   async register() {
+
     if (this.signupForm.invalid) {
       return;
     }

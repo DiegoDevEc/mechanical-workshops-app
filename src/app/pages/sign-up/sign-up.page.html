@@ -24,13 +24,37 @@
       </ion-item>
 
       <ion-item>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input type="text" formControlName="username" (ionBlur)="validateUsername()"></ion-input>
+        <ion-note *ngIf="signupForm.get('username')?.errors?.['usernameRegistered']" color="danger">
+          El username ya se encuentra registrado.
+        </ion-note>
+        <ion-note *ngIf="signupForm.get('username')?.errors?.['serverError']" color="danger">
+          Error al consultar la información.
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
         <ion-label position="floating">Cédula</ion-label>
-        <ion-input type="text" formControlName="identification"></ion-input>
+        <ion-input type="text" formControlName="identification" (ionBlur)="validateIdentification()"></ion-input>
+        <ion-note *ngIf="signupForm.get('identification')?.errors?.['identificationRegistered']" color="danger">
+          La cédula ya se encuentra registrado con otro usuario.
+        </ion-note>
+        <ion-note *ngIf="signupForm.get('identification')?.errors?.['serverError']" color="danger">
+          Error al consultar la información.
+        </ion-note>
       </ion-item>
 
       <ion-item>
         <ion-label position="floating">Email</ion-label>
-        <ion-input type="email" formControlName="email"></ion-input>
+        <ion-input type="email" formControlName="email"
+        (ionBlur)="validateEmail()"></ion-input>
+        <ion-note *ngIf="signupForm.get('email')?.errors?.['emailRegistered']" color="danger">
+          El email ya se encuentra registrado con otro usuario.
+        </ion-note>
+        <ion-note *ngIf="signupForm.get('email')?.errors?.['serverError']" color="danger">
+          Error al consultar la información.
+        </ion-note>
       </ion-item>
 
       <ion-item>
@@ -41,7 +65,10 @@
           (ionBlur)="validatePhone()"
         ></ion-input>
         <ion-note *ngIf="signupForm.get('phone')?.errors?.['phoneRegistered']" color="danger">
-          El número de teléfono ya está registrado.
+          El número de teléfono ya se encuentra registrado con otro usuario.
+        </ion-note>
+        <ion-note *ngIf="signupForm.get('phone')?.errors?.['serverError']" color="danger">
+          Error al consultar la información.
         </ion-note>
       </ion-item>
 
