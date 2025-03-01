@@ -8,13 +8,16 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 
-import {UserService} from './core/services/api/user.service';
+import { UserService } from './core/services/api/user.service';
 import { HttpClientModule } from '@angular/common/http';
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(),
+    AppRoutingModule, HttpClientModule,
+    IonicStorageModule.forRoot()],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, UserService],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

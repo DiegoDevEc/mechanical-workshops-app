@@ -9,3 +9,12 @@ export interface UserSaveRequestDTO {
   password: string;
   role: string;
 }
+
+export interface AuthRequestDto {
+  username: string;
+  password: string;
+}
+
+export interface AuthResponseDto {
+  accessToken: string;
+}
