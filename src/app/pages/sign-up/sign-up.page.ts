@@ -1,3 +1,5 @@
+import { MessageService } from './../../core/services/api/message.service';
+import { UserSaveRequestDTO } from './../../core/interface/user-interface';
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -19,12 +21,13 @@ export class SignUpPage implements OnInit {
   constructor(
     private httpUser: UserService,
     private navCtrl: NavController,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private messageService: MessageService
   ) {
     this.signupForm = this.fb.group({
       username: ['', Validators.required],
-      name: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
       identification: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
@@ -41,14 +44,13 @@ export class SignUpPage implements OnInit {
     checkFunction: (value: string) => Promise<boolean>
   ) {
     const control = this.signupForm.get(fieldName);
-
     if (control?.valid) {
       const value = control.value;
-
       this.isProblemServer = false;
-
       const isRegistered = await checkFunction(value);
-      control.setErrors({ [`${fieldName}Registered`]: isRegistered, serverError: this.isProblemServer });
+      if(isRegistered) {
+        control.setErrors({ [`${fieldName}Registered`]: isRegistered, serverError: this.isProblemServer });
+      }
     }
   }
 
@@ -81,11 +83,11 @@ export class SignUpPage implements OnInit {
   }
 
   async validateEmail() {
-    await this.validateField('email', (email) => this.checkIfRegistered(this.httpUser.checkIdentification.bind(this.httpUser), email));
+    await this.validateField('email', (email) => this.checkIfRegistered(this.httpUser.checkEmail.bind(this.httpUser), email));
   }
 
   async validateUsername() {
-    await this.validateField('username', (username) => this.checkIfRegistered(this.httpUser.checkIdentification.bind(this.httpUser), username));
+    await this.validateField('username', (username) => this.checkIfRegistered(this.httpUser.checkUsername.bind(this.httpUser), username));
   }
 
   async register() {
@@ -94,13 +96,32 @@ export class SignUpPage implements OnInit {
       return;
     }
 
-    // Si el número no está registrado, procede con el registro
-    const userData = this.signupForm.value;
-    console.log('Datos del usuario:', userData);
+    const userData: UserSaveRequestDTO = {
+      username: this.signupForm.value.username,
+      firstname: this.signupForm.value.firstname,
+      lastname: this.signupForm.value.lastname,
+      identification: this.signupForm.value.identification,
+      email: this.signupForm.value.email,
+      phone: this.signupForm.value.phone,
+      address: this.signupForm.value.address,
+      password: this.signupForm.value.password,
+      role: 'CLIENT'
+    };
 
-    // Aquí puedes hacer la petición al backend para registrar al usuario
-    // Ejemplo:
-    // this.http.post('https://your-backend-api.com/register', userData).subscribe(...);
+     console.log('Datos del usuario:', userData);
+
+     this.httpUser.registerUser(userData).subscribe(
+       (response) => {
+         console.log('✅ Usuario registrado:', response);
+         this.signupForm.reset();
+         this.messageService.presentToast('Usuario registrado exitosamente', 'success');
+         this.navCtrl.navigateForward('/login');
+       },
+       (error) => {
+         console.error('❌ Error al registrar usuario:', error);
+         this.messageService.presentToast('Usuario NO registrado', 'danger');
+       }
+     );
   }
 
   cancel() {
