@@ -1,0 +1,57 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+
+<ion-content [fullscreen]="false">
+
+  <ion-grid style="margin-top: 20px;">
+    <ion-row>
+      <ion-col size="12" v>
+        <ion-title>Administradores</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-searchbar placeholder="Buscar" [(ngModel)]="text" (ionInput)="search()"></ion-searchbar>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/dashboard-admin/form-administrator">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list>
+    @for (administrator of administrators; track administrator; let index = $index) {
+
+      <ion-card >
+        <ion-card-header>
+          <ion-card-subtitle> CI: {{administrator.identification}}</ion-card-subtitle>
+          <ion-card-subtitle>Teléfono: {{administrator.phone}}</ion-card-subtitle>
+          <ion-card-subtitle>Email: {{administrator.email}}</ion-card-subtitle>
+          <ion-card-title>{{administrator.firstname}} {{administrator.lastname}}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-button fill="clear" color="primary">
+            <ion-icon slot="start" name="create-outline"></ion-icon>
+            Editar
+          </ion-button>
+          <ion-button fill="clear" color="danger">
+            <ion-icon slot="start" name="trash-outline"></ion-icon>
+            Eliminar
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+
+
+
+
+
+</ion-content>

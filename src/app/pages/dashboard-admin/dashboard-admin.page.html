@@ -1,13 +1,8 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>dashboard-admin</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-app>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">dashboard-admin</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+  <ion-content [fullscreen]="false">
+    <ion-router-outlet></ion-router-outlet>
+  </ion-content>
+
+  <app-menu-administrator></app-menu-administrator>
+</ion-app>

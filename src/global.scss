@@ -74,3 +74,18 @@ ion-button {
   text-align: center;
   color: #7D848D;
 }
+
+ion-tab-bar {
+  --background: #f4f4f4;
+  --color: #333;
+  --color-selected: #3880ff;
+}
+
+ion-item {
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+ion-content {
+  padding-bottom: 60px; /* Ajusta según la altura del menú */
+}
