@@ -38,7 +38,6 @@ export class AdministratorsPage implements OnInit {
   constructor(private administratorsService: AdministratorsService,
     private navCtrl: NavController,
     private loadingController: LoadingController,
-    private httpAdministrator: AdministratorsService,
     private httpUser: UserService,
     private fb: FormBuilder,
     private messageService: MessageService) {
@@ -112,7 +111,7 @@ export class AdministratorsPage implements OnInit {
   }
 
   deleteAdministrator(id: string){
-    this.httpAdministrator.deleteAdministrator(id).subscribe(
+    this.administratorsService.deleteAdministrator(id).subscribe(
       (response) => {
         console.log('✅ Usuario eliminado:', response);
         this.messageService.presentToast('Usuario eliminado exitosamente', 'success');
@@ -233,7 +232,7 @@ export class AdministratorsPage implements OnInit {
       userData.id = this.idUser;
     }
 
-    this.httpAdministrator.registerAdministrator(userData).subscribe(
+    this.administratorsService.registerAdministrator(userData).subscribe(
       (response) => {
         console.log('✅ Usuario registrado:', response);
         this.administratorForm.reset();
