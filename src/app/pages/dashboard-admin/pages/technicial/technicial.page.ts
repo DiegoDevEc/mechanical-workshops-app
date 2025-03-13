@@ -153,6 +153,10 @@ export class TechnicialPage implements OnInit {
       this.isUpdate
       if (this.isUpdate) {
         this.messageService.presentToast('Datos no actualizados', 'warning');
+
+        this.title = 'Registrar';
+        this.isUpdate = false;
+        this.idUser = undefined;
       }
       this.initForm();
     }
