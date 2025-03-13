@@ -152,56 +152,6 @@ export class ServicesPage implements OnInit {
     }
   }
 
-  /*async validateField(
-    fieldName: 'phone' | 'identification' | 'email' | 'username',
-    checkFunction: (value: string) => Promise<boolean>
-  ) {
-    const control = this.technicialsForm.get(fieldName);
-    if (control?.valid) {
-      const value = control.value;
-      this.isProblemServer = false;
-      const isRegistered = await checkFunction(value);
-      if (isRegistered) {
-        control.setErrors({ [`${fieldName}Registered`]: isRegistered, serverError: this.isProblemServer });
-      }
-    }
-  }*/
-
-  /*async checkIfRegistered(
-    endpoint: (value: string, extraParam: any) => Observable<any>,
-    value: string
-  ): Promise<boolean> {
-    try {
-      if (!value) {
-        return true;
-      }
-      const response = await lastValueFrom(endpoint(value, undefined));
-      return false;
-    } catch (error: any) {
-      if (error.status === 0 || error.status === 404) {
-        this.isProblemServer = true;
-        return false;
-      }
-      return true;
-    }
-  }*/
-/*
-  async validatePhone() {
-    await this.validateField('phone', (phone) => this.checkIfRegistered(this.httpUser.checkPhoneNumber.bind(this.httpUser), phone));
-  }
-
-  async validateIdentification() {
-    await this.validateField('identification', (identification) => this.checkIfRegistered(this.httpUser.checkIdentification.bind(this.httpUser), identification));
-  }
-
-  async validateEmail() {
-    await this.validateField('email', (email) => this.checkIfRegistered(this.httpUser.checkEmail.bind(this.httpUser), email));
-  }
-
-  async validateUsername() {
-    await this.validateField('username', (username) => this.checkIfRegistered(this.httpUser.checkUsername.bind(this.httpUser), username));
-  }
-*/
   async register() {
 
     if (this.servicesForm.invalid) {

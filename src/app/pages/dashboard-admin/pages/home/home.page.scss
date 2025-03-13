@@ -1,0 +1,95 @@
+ion-card {
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  height: 150px; /* Altura fija para todos los cards */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  margin: 10px; /* Margen entre los cards */
+
+  ion-card-title {
+    font-size: 1.5em;
+    color: white; /* Texto en blanco para contrastar con el fondo */
+  }
+
+  ion-card-content {
+    font-size: 2em;
+    font-weight: bold;
+    color: white; /* Texto en blanco para contrastar con el fondo */
+    position: relative;
+    z-index: 1;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5em;
+    opacity: 0.2; /* Opacidad baja para el icono de fondo */
+    z-index: 0;
+    color: white; /* Color del icono */
+  }
+
+  /* Fondo y estilos específicos para cada card */
+  &.citas-agendadas {
+    background: linear-gradient(135deg, #0253B3, #0288D1); /* Degradado basado en #0253B3 */
+    &::before {
+      content: '\f47f'; /* Icono de calendario de Ionic */
+      font-family: 'Ionicons';
+    }
+  }
+
+  &.clientes {
+    background: linear-gradient(135deg, #0253B3, #03A9F4); /* Degradado basado en #0253B3 */
+    &::before {
+      content: '\f47d'; /* Icono de personas de Ionic */
+      font-family: 'Ionicons';
+    }
+  }
+
+  &.ventas {
+    background: linear-gradient(135deg, #0253B3, #00BCD4); /* Degradado basado en #0253B3 */
+    &::before {
+      content: '\f36f'; /* Icono de dinero de Ionic */
+      font-family: 'Ionicons';
+    }
+  }
+
+  &.citas-concretadas {
+    background: linear-gradient(135deg, #0253B3, #009688); /* Degradado basado en #0253B3 */
+    &::before {
+      content: '\f472'; /* Icono de checkmark de Ionic */
+      font-family: 'Ionicons';
+    }
+  }
+}
+
+ion-list {
+  margin-top: 20px; /* Espacio entre el grid y la lista */
+
+  ion-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+
+    ion-label {
+      h2 {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      p {
+        font-size: 1em;
+        color: #666;
+      }
+    }
+
+    ion-badge {
+      font-size: 0.9em;
+    }
+  }
+}

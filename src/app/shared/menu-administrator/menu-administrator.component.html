@@ -13,6 +13,13 @@
 <!-- Sidebar -->
 <div class="sidebar" [class.open]="isSidebarOpen">
   <ion-list>
+    <!-- Titulo -->
+    <ion-item>
+      <ion-label>
+        <h1>Bienvenido</h1>
+      </ion-label>
+    </ion-item>
+
     <!-- Inicio -->
     <ion-item button (click)="navigateTo('/dashboard-admin/home')">
       <ion-icon name="home-outline" slot="start"></ion-icon>
@@ -45,8 +52,20 @@
 
     <!-- Productos -->
     <ion-item button (click)="navigateTo('/dashboard-admin/products')">
-      <ion-icon name="cube-outline" slot="start"></ion-icon>
+      <ion-icon name="cube-outline" slot="start"></ion-icon> <!-- Icono para Productos -->
       <ion-label>Productos</ion-label>
+    </ion-item>
+
+    <!-- Categorías -->
+    <ion-item button (click)="navigateTo('/dashboard-admin/categories')">
+      <ion-icon name="folder-outline" slot="start"></ion-icon> <!-- Icono para Categorías -->
+      <ion-label>Categorías</ion-label>
+    </ion-item>
+
+    <!-- Cerrar Sesion -->
+    <ion-item button (click)="navigateTo('/logout')">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      <ion-label>Cerrar Sesión</ion-label>
     </ion-item>
   </ion-list>
 </div>
