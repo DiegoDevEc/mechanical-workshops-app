@@ -8,7 +8,7 @@ export class MessageService {
 
   constructor(private toastController: ToastController) { }
 
-  async presentToast(message: string, color: 'success' | 'danger') {
+  async presentToast(message: string, color: 'success' | 'danger' | 'warning' | 'primary' | 'secondary' | 'tertiary' | 'dark' | 'medium' | 'light' = 'success') {
     const toast = await this.toastController.create({
       message,
       duration: 3000, // Duración en milisegundos

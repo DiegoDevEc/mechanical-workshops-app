@@ -28,10 +28,6 @@ const routes: Routes = [
         path: 'appointments',
         loadChildren: () => import('./pages/appointments/appointments.module').then( m => m.AppointmentsPageModule)
       },
-      {
-        path: 'form-administrator',
-        loadChildren: () => import('./pages/form-administrator/form-administrator.module').then( m => m.FormAdministratorPageModule)
-      },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: '**', redirectTo: '' }
     ],

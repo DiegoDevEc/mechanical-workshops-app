@@ -14,6 +14,7 @@ import { HeaderComponent } from 'src/app/shared/header/header.component';
     CommonModule,
     FormsModule,
     IonicModule,
+    ReactiveFormsModule,
     HeaderComponent,
     AdministratorsPageRoutingModule
   ],

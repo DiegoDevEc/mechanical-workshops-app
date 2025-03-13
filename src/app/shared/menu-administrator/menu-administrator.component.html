@@ -1,20 +1,60 @@
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="home">
-      <ion-icon name="play-circle"></ion-icon>
-      Inicio
-    </ion-tab-button>
-    <ion-tab-button tab="administrators">
-      <ion-icon name="radio"></ion-icon>
-      Administradores
-    </ion-tab-button>
-    <ion-tab-button tab="technicial">
-      <ion-icon name="library"></ion-icon>
-      Técnicos
-    </ion-tab-button>
-    <ion-tab-button tab="appointments">
-      <ion-icon name="search"></ion-icon>
-      Citas
-    </ion-tab-button>
-  </ion-tab-bar>
-</ion-tabs>
+<ion-header>
+  <ion-toolbar>
+    <!-- Botón de hamburguesa -->
+    <ion-buttons slot="start">
+      <ion-button (click)="toggleSidebar()">
+        <ion-icon name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Sidebar -->
+<div class="sidebar" [class.open]="isSidebarOpen">
+  <ion-list>
+    <!-- Inicio -->
+    <ion-item button (click)="navigateTo('/dashboard-admin/home')">
+      <ion-icon name="home-outline" slot="start"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-item>
+
+    <!-- Administradores -->
+    <ion-item button (click)="navigateTo('/dashboard-admin/administrators')">
+      <ion-icon name="people-outline" slot="start"></ion-icon>
+      <ion-label>Administradores</ion-label>
+    </ion-item>
+
+    <!-- Técnicos -->
+    <ion-item button (click)="navigateTo('/dashboard-admin/technician')">
+      <ion-icon name="construct-outline" slot="start"></ion-icon>
+      <ion-label>Técnicos</ion-label>
+    </ion-item>
+
+    <!-- Citas -->
+    <ion-item button (click)="navigateTo('/dashboard-admin/appointments')">
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      <ion-label>Citas</ion-label>
+    </ion-item>
+
+    <!-- Servicios -->
+    <ion-item button (click)="navigateTo('/dashboard-admin/services')">
+      <ion-icon name="settings-outline" slot="start"></ion-icon>
+      <ion-label>Servicios</ion-label>
+    </ion-item>
+
+    <!-- Productos -->
+    <ion-item button (click)="navigateTo('/dashboard-admin/products')">
+      <ion-icon name="cube-outline" slot="start"></ion-icon>
+      <ion-label>Productos</ion-label>
+    </ion-item>
+  </ion-list>
+</div>
+
+<!-- Overlay para cerrar el sidebar -->
+<div class="overlay" [class.open]="isSidebarOpen" (click)="toggleSidebar()"></div>
+
+<!-- Contenido principal -->
+<ion-content>
+  <!-- Tu contenido aquí -->
+</ion-content>

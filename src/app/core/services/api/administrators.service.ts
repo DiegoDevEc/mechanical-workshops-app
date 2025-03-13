@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_API, URL_PUBLIC_API} from '../../constants';
-import { catchError, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,18 @@ export class AdministratorsService {
   }
 
   registerAdministrator(user: any) {
-    return this.http.post(`${this.apiUrl}/users/register`, user);
+    if(user.id) {
+      return this.updateAdministrator(user);
+    }
+    return this.http.post(`${this.apiUrl}/administrator/register`, user);
+  }
+
+  updateAdministrator(user: any) {
+    return this.http.put(`${this.apiUrl}/administrator/update/${user.id}`, user);
+  }
+
+  deleteAdministrator(idUser: any) {
+    return this.http.delete(`${this.apiUrl}/administrator/delete/${idUser}`);
   }
 
  getAdministrators(page: number, size: number, text: string) {

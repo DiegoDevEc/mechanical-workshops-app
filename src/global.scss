@@ -63,7 +63,7 @@ ion-button {
   margin: 30px 0;
 }
 
-.logo{
+.logo {
   width: 200px;
   height: 150px;
   margin: 0 auto;
@@ -87,5 +87,16 @@ ion-item {
 }
 
 ion-content {
-  padding-bottom: 60px; /* Ajusta según la altura del menú */
+  padding-bottom: 60px;
+  /* Ajusta según la altura del menú */
+}
+
+.bottom-controls-primary {
+  --background: rgba(242, 234, 234, 0.421);
+  --color: #3880ff;
+}
+
+.bottom-controls-danger {
+  --background: rgba(242, 234, 234, 0.421);
+  --color: #ff0000;
 }

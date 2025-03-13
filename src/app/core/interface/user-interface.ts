@@ -1,4 +1,5 @@
 export interface UserSaveRequestDTO {
+  id?: string;
   username: string;
   firstname: string;
   lastname: string;
