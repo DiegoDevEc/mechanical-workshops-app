@@ -2,7 +2,7 @@ import { Appointment } from './../../../../core/interface/appointment-interface'
 import { TechnicialService } from './../../../../core/services/api/technicial.service';
 import { ServicesService } from 'src/app/core/services/api/services.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonList, IonModal, LoadingController, NavController } from '@ionic/angular';
+import { AlertController, IonList, IonModal, LoadingController, NavController } from '@ionic/angular';
 import { MessageService } from 'src/app/core/services/api/message.service';
 import { AppointmentsService } from 'src/app/core/services/api/appointments.service';
 import { OverlayEventDetail } from '@ionic/core';
@@ -40,6 +40,7 @@ export class AppointmentsPage implements OnInit {
 
   constructor(
     private appointmentsService: AppointmentsService,
+    private alertController: AlertController,
     private servicesService: ServicesService,
     private navCtrl: NavController,
     private loadingController: LoadingController,
@@ -59,17 +60,52 @@ export class AppointmentsPage implements OnInit {
 
   updateAppoiment(appointment: any) {
     this.appointment = appointment;
-    this.selectTechnical = appointment.technician !== null ?  appointment.technician.id : ''
+    this.selectTechnical = appointment.technician !== null ? appointment.technician.id : ''
     this.selectService = appointment.service !== null ? appointment.service.id : ''
-    this.isView  = false;
+    this.isView = false;
     this.modal.present();
   }
 
-  cancelAppoiment(appoiment: any){
-    console.log('Cancelando');
-    appoiment.statusAtt
+  async cancelAppoiment(appointmentId: any) {
+    console.log('ID de la cita:', appointmentId);
 
+    const alert = await this.alertController.create({
+      header: 'Confirmar cancelación',
+      message: '¿Estás seguro de que deseas cancelar esta cita?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancelación abortada');
+          }
+        },
+        {
+          text: 'Sí, cancelar',
+          handler: async () => {  // Usar una función flecha para capturar correctamente `appointmentId`
+            console.log('Cancelando cita con ID:', appointmentId);
+
+            this.appointmentsService.deleteAppointments(appointmentId).subscribe(
+              (response: any) => {
+                this.messageService.presentToast('Cita cancelada', 'success');
+                this.chargeInformation();
+              },
+              (error: any) => {
+                this.messageService.presentToast('Error al cancelar la cita: ' + error.error.message, 'danger');
+                if (error.error.message.includes('token')) {
+                  this.navCtrl.navigateRoot('/login');
+                }
+              }
+            );
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
+
+
 
   async onIonInfinite(event: any) {
     if ((this.pageResponse.totalPages - 1) <= this.pages) {
@@ -167,7 +203,7 @@ export class AppointmentsPage implements OnInit {
         this.messageService.presentToast('Cita NO actualizada', 'danger');
       },
       () => {
-      this.modal.dismiss(null, 'confirm');
+        this.modal.dismiss(null, 'confirm');
       }
     )
   }
@@ -191,7 +227,8 @@ export class AppointmentsPage implements OnInit {
       'PROGRESS': 'warning',
       'INGRESS': 'primary',
       'NOTIFIED': 'tertiary',
-      'FINISH': 'success'
+      'FINISH': 'success',
+      'CANCELED': 'danger'
     };
     return colorMap[status] || 'medium'; // 'medium' como color por defecto
   }

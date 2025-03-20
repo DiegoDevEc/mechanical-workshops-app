@@ -61,6 +61,7 @@
                   <p *ngSwitchCase="'ASSIGN'"> <b>Atención: </b>Asignado</p>
                   <p *ngSwitchCase="'NOTIFIED'"><b>Atención: </b> Notificado</p>
                   <p *ngSwitchCase="'FINISH'"><b>Atención: </b> Finalizado</p>
+                  <p *ngSwitchCase="'CANCELED'"><b>Atención: </b> Cancelado</p>
                   <p *ngSwitchDefault>{{ appointment.status }}</p>
                 </ng-container>
               </ion-col>
@@ -85,6 +86,7 @@
                     <span *ngSwitchCase="'PROGRESS'">En Progreso</span>
                     <span *ngSwitchCase="'INGRESS'">Ingresado</span>
                     <span *ngSwitchCase="'FINISH'">Finalizado</span>
+                    <span *ngSwitchCase="'CANCELED'">Cancelado</span>
                     <span *ngSwitchDefault>{{ appointment.status }}</span>
                   </ng-container>
                 </ion-badge>
@@ -104,7 +106,7 @@
         </ion-item-option>
 
         <ion-item-option class="bottom-controls-danger" *ngIf="appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
-        (click)="updateAppoiment(appointment)" (click)="cancelAppoiment(appointment)">
+        (click)="cancelAppoiment(appointment.id)">
           <ion-icon slot="icon-only" name="close-circle"></ion-icon>
         </ion-item-option>
 

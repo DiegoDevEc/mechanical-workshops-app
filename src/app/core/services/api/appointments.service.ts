@@ -21,8 +21,8 @@ export class AppointmentsService {
     return this.http.put(`${this.apiUrl}/appointments/update-assigned/${appointment.id}`, data);
   }
 
-  deleteAppointments(idUser: any) {
-    return this.http.delete(`${this.apiUrl}/appointments/delete/${idUser}`);
+  deleteAppointments(appointmentId: any) {
+    return this.http.delete(`${this.apiUrl}/appointments/delete/${appointmentId}`);
   }
 
   getAppointments(page: number, size: number, startDate: string, endDate: string) {
