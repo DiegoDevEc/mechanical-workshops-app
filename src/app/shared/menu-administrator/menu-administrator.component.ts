@@ -15,7 +15,7 @@ export class MenuAdministratorComponent implements OnInit {
   isProductsSubMenuOpen: boolean = false;
   userData: any;
 
-  title = 'Menu Administrador';
+  title = 'Administrador';
   constructor(private router: Router, private authService: AuthService) {
     this.getUserData();
 
@@ -48,8 +48,6 @@ export class MenuAdministratorComponent implements OnInit {
 
   async getUserData() {
     await this.authService.getUserData().then((data) => {
-      console.log(data);
-
       this.userData = data;
     });
   }

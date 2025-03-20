@@ -27,8 +27,6 @@ export class UserService {
       ? `${this.apiUrl}/users/validate/phone?phone=${phone}&userId=${userId}`
       : `${this.apiUrl}/users/validate/phone?phone=${phone}`;
 
-    console.log('✅ URL Generada:', urlValidated);
-
     return this.http.get<any>(urlValidated).pipe(
       tap((res) => console.log('✅ Respuesta de API recibida:', res)),
       catchError((error) => {

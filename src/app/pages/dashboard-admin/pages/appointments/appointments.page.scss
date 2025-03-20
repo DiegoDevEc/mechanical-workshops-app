@@ -1,0 +1,19 @@
+.highlight {
+  margin-top: 10px;
+  --background: #e3f2fd;  /* Fondo azul claro */
+  border: 2px solid #1e88e5;  /* Borde azul */
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #222;
+}
+
+.status-badge {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+}
