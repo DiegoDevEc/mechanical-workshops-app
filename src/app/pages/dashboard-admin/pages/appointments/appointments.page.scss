@@ -17,3 +17,50 @@
   font-size: 14px;
   border-radius: 8px;
 }
+
+.small-label {
+  font-size: 12px; /* Reduce el tamaño de la etiqueta */
+  color: #666; /* Color gris para mejor visualización */
+}
+
+.small-text-content {
+  font-size: 14px; /* Tamaño de la fecha más pequeño */
+  color: #333; /* Color más oscuro para contraste */
+  font-weight: bold;
+}
+
+ion-item.small-text {
+  --inner-padding-end: 8px; /* Reduce el espacio interno */
+  --inner-padding-start: 8px;
+}
+
+ion-row {
+  margin-top: 10px;
+}
+
+ion-button {
+  width: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.centered-modal {
+  display: block;
+  margin: 0 auto;
+  width: 80%;  /* Ajusta el tamaño según lo desees */
+  max-width: 400px;  /* Tamaño máximo para evitar que se estire demasiado */
+}
+
+ion-modal {
+  --inner-padding: 0;
+}
+
+ion-datetime {
+  margin: auto auto;
+  width: 100%;  /* El contenido del datetime toma el 100% de su contenedor */
+}
+ion-fab-button {
+  margin-bottom: 0px; /* Eliminar espacio vertical adicional */
+}
+
+

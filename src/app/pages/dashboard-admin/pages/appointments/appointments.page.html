@@ -7,12 +7,81 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-searchbar placeholder="Buscar" [(ngModel)]="text" (ionBlur)="search()" (keyup.enter)="search()"
-    (ionClear)="search()">
-  </ion-searchbar>
 </ion-header>
 
 <ion-content [fullscreen]="false">
+
+  <!-- Contenedor de los botones flotantes -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <div style="display: flex; flex-direction: row; gap: 10px;">
+      <!-- Botón para limpiar filtros -->
+      <ion-fab-button (click)="clearFilters()">
+        <ion-icon name="filter-outline"></ion-icon>
+      </ion-fab-button>
+
+      <!-- Botón para ir al inicio -->
+      <ion-fab-button (click)="scrollToTop()">
+        <ion-icon name="arrow-up-outline"></ion-icon>
+      </ion-fab-button>
+    </div>
+  </ion-fab>
+
+
+  <!-- Filtros -->
+  <ion-grid>
+
+    <ion-row>
+      <!-- Fecha Inicial -->
+      <ion-col size="6">
+        <ion-item>
+          <ion-label class="small-label">Desde:</ion-label>
+          <ion-text (click)="openModal(datetimeModalStart)" class="small-text-content">
+            {{ startDate ? (startDate | date: 'yyyy-MM-dd') : 'Seleccionar' }}
+          </ion-text>
+        </ion-item>
+        <ion-modal #datetimeModalStart>
+          <ng-template>
+            <ion-datetime id="datetime-finish" presentation="date"
+              (ionChange)="onStartDateChange($event); closeModal(datetimeModalStart)"
+              [showClearButton]="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+
+      <!-- Fecha Final -->
+      <ion-col size="6">
+        <ion-item>
+          <ion-label class="small-label">Hasta:</ion-label>
+          <ion-text (click)="openModal(datetimeModalFinish)" class="small-text-content">
+            {{ finishDate ? (finishDate | date: 'yyyy-MM-dd') : 'Seleccionar' }}
+          </ion-text>
+        </ion-item>
+        <ion-modal #datetimeModalFinish>
+          <ng-template>
+            <ion-datetime id="datetime-finish" presentation="date"
+              (ionChange)="onEndDateChange($event); closeModal(datetimeModalFinish)"
+              [showClearButton]="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>Estado:</ion-label>
+          <ion-select [(ngModel)]="statusFilter" (ionChange)="onStatusChange($event)">
+            <ion-select-option value="">Todos</ion-select-option>
+            <ion-select-option value="INGRESS">Ingresado</ion-select-option>
+            <ion-select-option value="PROGRESS">En Progreso</ion-select-option>
+            <ion-select-option value="FINISH">Finalizado</ion-select-option>
+            <ion-select-option value="CANCELED">Cancelado</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
 
   <ion-list>
     @for (appointment of appointments; track appointment; let index = $index) {
@@ -25,6 +94,23 @@
               <ion-col size="12">
                 <h2 class="title"><b>Cliente:</b> {{ appointment.client.firstname }} {{ appointment.client.lastname }}
                 </h2>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="6">
+                <h3><b>F. Reserva: {{appointment.dateAppointment}}</b></h3>
+              </ion-col>
+              <ion-col size="6">
+                <ion-badge [color]="getStatusColor(appointment.status)">
+                  <ng-container [ngSwitch]="appointment.status">
+                    <span *ngSwitchCase="'PROGRESS'">En Progreso</span>
+                    <span *ngSwitchCase="'INGRESS'">Ingresado</span>
+                    <span *ngSwitchCase="'FINISH'">Finalizado</span>
+                    <span *ngSwitchCase="'CANCELED'">Cancelado</span>
+                    <span *ngSwitchDefault>{{ appointment.status }}</span>
+                  </ng-container>
+                </ion-badge>
               </ion-col>
             </ion-row>
 
@@ -78,20 +164,6 @@
               </ion-col>
             </ion-row>
             }
-
-            <ion-row>
-              <ion-col size="12">
-                <ion-badge class="status-badge" [color]="getStatusColor(appointment.status)">
-                  <ng-container [ngSwitch]="appointment.status">
-                    <span *ngSwitchCase="'PROGRESS'">En Progreso</span>
-                    <span *ngSwitchCase="'INGRESS'">Ingresado</span>
-                    <span *ngSwitchCase="'FINISH'">Finalizado</span>
-                    <span *ngSwitchCase="'CANCELED'">Cancelado</span>
-                    <span *ngSwitchDefault>{{ appointment.status }}</span>
-                  </ng-container>
-                </ion-badge>
-              </ion-col>
-            </ion-row>
           </ion-grid>
         </ion-label>
 
@@ -100,13 +172,14 @@
       <ion-item-options side="end">
 
         <ion-item-option class="bottom-controls-primary"
-        *ngIf="appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
+          *ngIf="appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
           (click)="updateAppoiment(appointment)">
           <ion-icon slot="icon-only" name="cog"></ion-icon>
         </ion-item-option>
 
-        <ion-item-option class="bottom-controls-danger" *ngIf="appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
-        (click)="cancelAppoiment(appointment.id)">
+        <ion-item-option class="bottom-controls-danger"
+          *ngIf="appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
+          (click)="cancelAppoiment(appointment.id)">
           <ion-icon slot="icon-only" name="close-circle"></ion-icon>
         </ion-item-option>
 
@@ -120,7 +193,7 @@
 
   <!-- Modal Con Formulario de Registro o Actualizacion -->
 
-  <ion-modal trigger="open-modal-appointments" (willDismiss)="onWillDismiss($event)">
+  <ion-modal #openModalMppointments (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>
         <ion-toolbar>

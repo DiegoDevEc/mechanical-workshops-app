@@ -2,7 +2,7 @@ import { Appointment } from './../../../../core/interface/appointment-interface'
 import { TechnicialService } from './../../../../core/services/api/technicial.service';
 import { ServicesService } from 'src/app/core/services/api/services.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController, IonList, IonModal, LoadingController, NavController } from '@ionic/angular';
+import { AlertController, IonContent, IonList, IonModal, LoadingController, NavController } from '@ionic/angular';
 import { MessageService } from 'src/app/core/services/api/message.service';
 import { AppointmentsService } from 'src/app/core/services/api/appointments.service';
 import { OverlayEventDetail } from '@ionic/core';
@@ -15,13 +15,17 @@ import { OverlayEventDetail } from '@ionic/core';
 })
 export class AppointmentsPage implements OnInit {
 
-  @ViewChild(IonModal) modal!: IonModal;
   @ViewChild(IonList) ionList!: IonList;
+
+  @ViewChild('datetimeModalStart', { static: true }) datetimeModalStart!: IonModal;
+  @ViewChild('datetimeModalFinish', { static: true }) datetimeModalFinish!: IonModal;
+  @ViewChild('openModalMppointments', { static: true }) openModalMppointments!: IonModal;
+
+  @ViewChild(IonContent, { static: false }) content!: IonContent;
+
 
   pages: number = 0;
   size: number = 10;
-  startDate: string = '2025-03-18';
-  endDate: string = '';
   text: string = '';
   appointments: any[] = [];
   services: any[] = [];
@@ -37,6 +41,10 @@ export class AppointmentsPage implements OnInit {
   selectTechnical = '';
 
   isView = false;
+
+  startDate: string | null = this.getCurrentDate(); // Variable para almacenar la fecha inicial
+  finishDate: string | null = null; // Variable para almacenar la fecha fina
+  statusFilter: string = '';
 
   constructor(
     private appointmentsService: AppointmentsService,
@@ -54,21 +62,15 @@ export class AppointmentsPage implements OnInit {
     this.chargeTechnicians();
   }
 
-  search() {
-    console.log("search");
-  }
-
   updateAppoiment(appointment: any) {
     this.appointment = appointment;
     this.selectTechnical = appointment.technician !== null ? appointment.technician.id : ''
     this.selectService = appointment.service !== null ? appointment.service.id : ''
     this.isView = false;
-    this.modal.present();
+    this.openModal(this.openModalMppointments)
   }
 
   async cancelAppoiment(appointmentId: any) {
-    console.log('ID de la cita:', appointmentId);
-
     const alert = await this.alertController.create({
       header: 'Confirmar cancelación',
       message: '¿Estás seguro de que deseas cancelar esta cita?',
@@ -82,7 +84,7 @@ export class AppointmentsPage implements OnInit {
         },
         {
           text: 'Sí, cancelar',
-          handler: async () => {  // Usar una función flecha para capturar correctamente `appointmentId`
+          handler: async () => {
             console.log('Cancelando cita con ID:', appointmentId);
 
             this.appointmentsService.deleteAppointments(appointmentId).subscribe(
@@ -105,8 +107,6 @@ export class AppointmentsPage implements OnInit {
     await alert.present();
   }
 
-
-
   async onIonInfinite(event: any) {
     if ((this.pageResponse.totalPages - 1) <= this.pages) {
       event.target.complete();
@@ -127,10 +127,14 @@ export class AppointmentsPage implements OnInit {
     await loading.present();
 
     try {
-      const data: any = await this.appointmentsService.getAppointments(this.pages, this.size, this.startDate, this.endDate).toPromise();
+
+      const startDateValue = this.startDate === null ? '' : this.startDate;
+      const endDateValue = this.finishDate === null ? '' : this.finishDate;
+      const statusValue = this.statusFilter === '' ? '' : this.statusFilter;
+
+      const data: any = await this.appointmentsService.getAppointments(this.pages, this.size, startDateValue, endDateValue, statusValue).toPromise();
       this.pageResponse = data;
       this.appointments = data.content;
-      console.log(this.appointments);
 
     } catch (error: any) {
       this.messageService.presentToast('Error al cargar la información: ' + error.error.message, 'danger');
@@ -162,8 +166,6 @@ export class AppointmentsPage implements OnInit {
       const data: any = await this.technicialService.getTechnician(this.pages, this.size, this.text).toPromise();
       this.pageResponse = data;
       this.technicians = data.content;
-      console.log(this.technicians);
-
 
     } catch (error: any) {
       this.messageService.presentToast('Error al cargar la información: ' + error.error.message, 'danger');
@@ -174,7 +176,7 @@ export class AppointmentsPage implements OnInit {
   }
 
   cancel() {
-    this.modal.dismiss(null, 'cancel');
+    this.openModalMppointments.dismiss(null, 'cancel');
   }
 
   confirm() {
@@ -194,23 +196,20 @@ export class AppointmentsPage implements OnInit {
 
     this.appointmentsService.updateAppointments(this.appointment, this.selectService, this.selectTechnical).subscribe(
       (response) => {
-        console.log('✅ Appointment actualizado:', response);
         this.messageService.presentToast('Cita actualizada - Turno en progreso', 'success');
         this.chargeInformation();
       },
       (error) => {
-        console.error('❌ Error al actualizar Appointment:', error);
         this.messageService.presentToast('Cita NO actualizada', 'danger');
       },
       () => {
-        this.modal.dismiss(null, 'confirm');
+        this.openModalMppointments.dismiss(null, 'cancel');
       }
     )
   }
 
   onWillDismiss(event: CustomEvent<OverlayEventDetail>) {
     if (event.detail.role === 'confirm') {
-      console.log('Registrando .....');
       this.selectService = '';
       this.selectTechnical = '';
     }
@@ -230,7 +229,62 @@ export class AppointmentsPage implements OnInit {
       'FINISH': 'success',
       'CANCELED': 'danger'
     };
-    return colorMap[status] || 'medium'; // 'medium' como color por defecto
+    return colorMap[status] || 'medium';
   }
 
+
+  onStartDateChange(event: any) {
+    if (event && event.detail.value) {
+      const selectedDate = new Date(event.detail.value);
+      this.startDate = this.formatDate(selectedDate);
+      this.chargeInformation();
+    }
+  }
+
+  onEndDateChange(event: any) {
+    if (event && event.detail.value) {
+      const selectedDate = new Date(event.detail.value);
+      this.finishDate = this.formatDate(selectedDate);
+      this.chargeInformation();
+    }
+  }
+
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0-11
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  closeModal(modal: IonModal) {
+    modal.dismiss();
+  }
+
+  openModal(modal: IonModal) {
+    modal.present();
+  }
+
+  getCurrentDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  onStatusChange(event: any) {
+    this.chargeInformation()
+  }
+
+  scrollToTop() {
+    this.content.scrollToTop(500);  // 500ms de animación
+  }
+
+  clearFilters(){
+    this.startDate = this.getCurrentDate();
+    this.finishDate = null;
+    this.statusFilter = '';
+    this.scrollToTop()
+    this.chargeInformation();
+  }
 }
