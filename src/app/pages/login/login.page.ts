@@ -11,13 +11,18 @@ import { NavController } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
 
- phoneNumber: string = '';
+  phoneNumber: string = '';
   password: string = '';
 
-  constructor(private navCtrl: NavController, private authService: AuthService) {}
+  constructor(private navCtrl: NavController, private authService: AuthService) { }
 
   ngOnInit(): void {
 
+  }
+
+  initData() {
+    this.phoneNumber = '';
+    this.password = '';
   }
 
   async login() {
@@ -28,29 +33,39 @@ export class LoginPage implements OnInit {
     };
 
     this.authService.loginUser(authRequestDto).subscribe(async (response) => {
-      console.log('✅ Respuesta del servidor:', response);
       await this.authService.saveToken(response.accessToken);
-
       const role = await this.authService.getUserRole();
+      const userData = await this.authService.getUserData();
+      const changePassword = await userData.changePassword;
+
+      if (changePassword) {
+        this.navCtrl.navigateForward('/change-password');
+        this.initData();
+        return;
+      }
 
       switch (role) {
         case 'CLIENT':
           this.navCtrl.navigateForward('/dashboard');
+          this.initData();
           break;
         case 'ADMINISTRATOR':
           this.navCtrl.navigateForward('/dashboard-admin');
+          this.initData();
           break;
         case 'TECHNICIAN':
           this.navCtrl.navigateForward('/dashboard-technician');
+          this.initData();
           break;
         default:
           this.navCtrl.navigateForward('/login');
+          this.initData();
           break;
       }
     },
-    (error) => {
-      console.error('❌ Error al iniciar sesión:', error);
-    });
+      (error) => {
+        console.error('❌ Error al iniciar sesión:', error);
+      });
   }
 
   singUp() {

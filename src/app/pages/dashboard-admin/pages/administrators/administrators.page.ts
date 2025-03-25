@@ -56,8 +56,7 @@ export class AdministratorsPage implements OnInit {
       identification: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      address: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      address: ['', Validators.required]
     });
   }
 
@@ -214,6 +213,7 @@ export class AdministratorsPage implements OnInit {
   async register() {
 
     if (this.administratorForm.invalid) {
+      console.log('❌ Formulario inválido:', this.administratorForm);
       return;
     }
 

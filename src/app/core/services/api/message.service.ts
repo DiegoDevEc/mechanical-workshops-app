@@ -11,7 +11,7 @@ export class MessageService {
   async presentToast(message: string, color: 'success' | 'danger' | 'warning' | 'primary' | 'secondary' | 'tertiary' | 'dark' | 'medium' | 'light' = 'success') {
     const toast = await this.toastController.create({
       message,
-      duration: 3000, // Duración en milisegundos
+      duration: 2500, // Duración en milisegundos
       position: 'top', // 'top', 'middle' o 'bottom'
       color, // Color del mensaje ('success' para éxito, 'danger' para error)
     });

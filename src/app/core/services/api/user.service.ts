@@ -15,6 +15,7 @@ export class UserService {
   }
 
   registerUser(user: any) {
+    user.mustChangePassword = false;
     return this.http.post(`${this.apiUrl}/users/register`, user);
   }
 

@@ -14,6 +14,7 @@ export class TechnicialService {
   }
 
   registerTechnician(user: any) {
+    user.mustChangePassword = true;
     if(user.id) {
       return this.updateTechnician(user);
     }

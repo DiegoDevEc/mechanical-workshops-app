@@ -266,9 +266,12 @@ export class AppointmentsPage implements OnInit {
 
   getCurrentDate(): string {
     const today = new Date();
+    today.setDate(today.getDate() - 10); // Restar 10 días
+
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
+
     return `${year}-${month}-${day}`;
   }
 

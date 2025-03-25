@@ -1,3 +1,4 @@
+import { ChangePasswordPage } from './../../../pages/change-password/change-password.page';
 import { AuthRequestDto, AuthResponseDto } from './../../interface/user-interface';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +25,13 @@ export class AuthService {
 
   loginUser(authRequestDto: AuthRequestDto) {
     return this.http.post<AuthResponseDto>(`${this.apiUrl}/auth/login`, authRequestDto);
+  }
+
+  async ChangePassword(newPassword: string) {
+    const userData = await this.getUserData();
+    const email = userData.email;
+
+    return this.http.post(`${this.apiUrl}/auth/change-password`, { newPassword, email });
   }
 
   // ✅ Guardar token

@@ -22,6 +22,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/sign-up/sign-up.module').then( m => m.SignUpPageModule)
   },
   {
+    path: 'change-password',
+    loadChildren: () => import('./pages/change-password/change-password.module')
+    .then( m => m.ChangePasswordPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardPageModule),
     canActivate: [AuthGuard, RoleGuard],

@@ -14,6 +14,7 @@ export class AdministratorsService {
   }
 
   registerAdministrator(user: any) {
+    user.mustChangePassword = true;
     if(user.id) {
       return this.updateAdministrator(user);
     }

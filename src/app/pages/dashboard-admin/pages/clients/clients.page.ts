@@ -1,20 +1,21 @@
-import { OverlayEventDetail } from '@ionic/core/components';
-import { TechnicialService } from './../../../../core/services/api/technicial.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonList, IonModal, LoadingController, NavController } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core';
 import { lastValueFrom, Observable } from 'rxjs';
+import { UserSaveRequestDTO } from 'src/app/core/interface/user-interface';
+import { ClientsService } from 'src/app/core/services/api/clients.service';
 import { MessageService } from 'src/app/core/services/api/message.service';
 import { UserService } from 'src/app/core/services/api/user.service';
-import { UserSaveRequestDTO } from 'src/app/core/interface/user-interface';
 
 @Component({
-  selector: 'app-technicial',
-  templateUrl: './technicial.page.html',
-  styleUrls: ['./technicial.page.scss'],
+  selector: 'app-clients',
+  templateUrl: './clients.page.html',
+  styleUrls: ['./clients.page.scss'],
   standalone: false
 })
-export class TechnicialPage implements OnInit {
+export class ClientsPage implements OnInit {
+
 
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild(IonList) ionList!: IonList;
@@ -22,10 +23,10 @@ export class TechnicialPage implements OnInit {
   pages: number = 0;
   size: number = 10;
   text: string = '';
-  technicians: any[] = [];
+  clients: any[] = [];
   pageResponse: any;
 
-  technicialsForm: FormGroup;
+  clientsForm: FormGroup;
   message: string = '';
   isProblemServer = false
 
@@ -34,19 +35,19 @@ export class TechnicialPage implements OnInit {
   isUpdate: any;
   idUser: string | undefined;
 
-  constructor(private technicianService: TechnicialService,
+  constructor(private clientService: ClientsService,
     private navCtrl: NavController,
     private loadingController: LoadingController,
     private httpUser: UserService,
     private fb: FormBuilder,
     private messageService: MessageService) {
-    this.technicialsForm = this.initForm();
+    this.clientsForm = this.initForm();
   }
 
 
   initForm() {
-    if (this.technicialsForm) {
-      this.technicialsForm.reset();
+    if (this.clientsForm) {
+      this.clientsForm.reset();
     }
     return this.fb.group({
       username: ['', Validators.required],
@@ -55,21 +56,21 @@ export class TechnicialPage implements OnInit {
       identification: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      address: ['', Validators.required],
+      address: ['', Validators.required]
     });
 
   }
 
 
   async ngOnInit() {
-    this.technicians = [];
+    this.clients = [];
     this.chargeInformation();
   }
 
   async search() {
     if (this.text.length >= 3 || this.text.length === 0) {
       this.pages = 0;
-      this.technicians = [];
+      this.clients = [];
       this.chargeInformation();
     }
   }
@@ -84,9 +85,9 @@ export class TechnicialPage implements OnInit {
     await loading.present();
 
     try {
-      const data: any = await this.technicianService.getTechnician(this.pages, this.size, this.text).toPromise();
+      const data: any = await this.clientService.getClients(this.pages, this.size, this.text).toPromise();
       this.pageResponse = data;
-      this.technicians = data.content;
+      this.clients = data.content;
     } catch (error: any) {
       this.messageService.presentToast('Error al cargar la información: ' + error.error.message, 'danger');
       if (error.error.message.includes('token')) {
@@ -108,30 +109,30 @@ export class TechnicialPage implements OnInit {
     event.target.complete();
   }
 
-  deleteTechnician(id: string){
-    this.technicianService.deleteTechnician(id).subscribe(
+  deleteClient(id: string){
+    this.clientService.deleteClient(id).subscribe(
       (response) => {
-        console.log('✅ Usuario eliminado:', response);
-        this.messageService.presentToast('Usuario eliminado exitosamente', 'success');
+        console.log('✅ Cliente eliminado:', response);
+        this.messageService.presentToast('Cliente eliminado exitosamente', 'success');
         this.chargeInformation();
       },
       (error) => {
-        console.error('❌ Error al eliminar usuario:', error);
-        this.messageService.presentToast('Usuario NO eliminado', 'danger');
+        console.error('❌ Error al eliminar cliente:', error);
+        this.messageService.presentToast('Cliente NO eliminado', 'danger');
       }
     )
     };
 
-    updateTechnician(administrator: any) {
-    if (!administrator) {
-      console.error('Error: El administrador es indefinido o nulo');
+    updateClient(client: any) {
+    if (!client) {
+      console.error('Error: El cliente es indefinido o nulo');
       return;
     }
     this.title = 'Actualizar';
     this.isUpdate = true;
-    this.idUser = administrator.id;
-    this.technicialsForm.patchValue(administrator);
-    this.technicialsForm.get('password')?.clearValidators();
+    this.idUser = client.id;
+    this.clientsForm.patchValue(client);
+    this.clientsForm.get('password')?.clearValidators();
     this.modal.present();
   }
 
@@ -165,7 +166,7 @@ export class TechnicialPage implements OnInit {
     fieldName: 'phone' | 'identification' | 'email' | 'username',
     checkFunction: (value: string) => Promise<boolean>
   ) {
-    const control = this.technicialsForm.get(fieldName);
+    const control = this.clientsForm.get(fieldName);
     if (control?.valid) {
       const value = control.value;
       this.isProblemServer = false;
@@ -213,32 +214,32 @@ export class TechnicialPage implements OnInit {
 
   async register() {
 
-    if (this.technicialsForm.invalid) {
+    if (this.clientsForm.invalid) {
       return;
     }
 
     const userData: UserSaveRequestDTO = {
       id: undefined,
-      username: this.technicialsForm.value.username,
-      firstname: this.technicialsForm.value.firstname,
-      lastname: this.technicialsForm.value.lastname,
-      identification: this.technicialsForm.value.identification,
-      email: this.technicialsForm.value.email,
-      phone: this.technicialsForm.value.phone,
-      address: this.technicialsForm.value.address,
-      password: this.technicialsForm.value.password,
-      role: 'TECHNICIAN'
+      username: this.clientsForm.value.username,
+      firstname: this.clientsForm.value.firstname,
+      lastname: this.clientsForm.value.lastname,
+      identification: this.clientsForm.value.identification,
+      email: this.clientsForm.value.email,
+      phone: this.clientsForm.value.phone,
+      address: this.clientsForm.value.address,
+      password: this.clientsForm.value.password,
+      role: 'CLIENT'
     };
 
     if (this.isUpdate) {
       userData.id = this.idUser;
     }
 
-    this.technicianService.registerTechnician(userData).subscribe(
+    this.clientService.registerClient(userData).subscribe(
       (response) => {
-        console.log('✅ Usuario registrado:', response);
-        this.technicialsForm.reset();
-        this.messageService.presentToast('Usuario registrado exitosamente', 'success');
+        console.log('✅ Cliente registrado:', response);
+        this.clientsForm.reset();
+        this.messageService.presentToast('Cliente registrado exitosamente', 'success');
         this.chargeInformation();
       },
       (error) => {
