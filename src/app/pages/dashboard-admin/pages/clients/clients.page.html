@@ -16,7 +16,7 @@
 <ion-content [fullscreen]="false">
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button id="open-modal2" color="success">
+    <ion-fab-button id="open-modal-clients" color="success">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -51,7 +51,7 @@
 
   <!-- Modal Con Formulario de Registro o Actualizacion -->
 
-  <ion-modal trigger="open-modal2" (willDismiss)="onWillDismiss($event)">
+  <ion-modal trigger="open-modal-clients" (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -70,7 +70,6 @@
       </ion-header>
 
       <ion-content class="ion-padding">
-
 
         <form [formGroup]="clientsForm" (ngSubmit)="register()">
           <div class="login-container">

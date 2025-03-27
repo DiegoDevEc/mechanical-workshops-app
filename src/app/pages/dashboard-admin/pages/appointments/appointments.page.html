@@ -172,13 +172,13 @@
       <ion-item-options side="end">
 
         <ion-item-option class="bottom-controls-primary"
-          *ngIf="appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
+          *ngIf="appointment.statusAttendance === 'INGRESS' || appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
           (click)="updateAppoiment(appointment)">
           <ion-icon slot="icon-only" name="cog"></ion-icon>
         </ion-item-option>
 
         <ion-item-option class="bottom-controls-danger"
-          *ngIf="appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
+          *ngIf="appointment.statusAttendance === 'INGRESS' ||appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
           (click)="cancelAppoiment(appointment.id)">
           <ion-icon slot="icon-only" name="close-circle"></ion-icon>
         </ion-item-option>
