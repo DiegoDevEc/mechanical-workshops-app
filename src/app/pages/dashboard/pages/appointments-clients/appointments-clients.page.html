@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-grid style="margin-top: 20px;">
+    <ion-row>
+      <ion-col size="12" v>
+        <ion-title>Reservas</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content>
+  <!-- Paso 1: Selección de fecha/hora -->
+  <app-date-time-selection
+    *ngIf="currentStep === 1"
+    (dateTimeSelected)="onDateTimeSelected($event)">
+  </app-date-time-selection>
+
+  <!-- Paso 2: Selección de vehicuko -->
+  <app-vehicule-selection
+    *ngIf="currentStep === 2"
+    (vehiculeSelected)="onVehiculeSelected($event)"
+    (back)="goBack()">
+  </app-vehicule-selection>
+
+  <!-- Paso 3: Selección de servicio -->
+  <app-service-selection
+    *ngIf="currentStep === 3"
+    (serviceSelected)="onServiceSelected($event)"
+    (back)="goBack()">
+  </app-service-selection>
+
+  <!-- Paso 4: Confirmación final -->
+  <app-confirmation
+    *ngIf="currentStep === 4"
+    [reservationData]="reservationData"
+    (done)="resetComponentState()">
+  </app-confirmation>
+</ion-content>

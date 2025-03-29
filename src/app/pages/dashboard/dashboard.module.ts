@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
+import { MenuClientComponent } from "../../shared/menu-client/menu-client.component";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DashboardPageRoutingModule
-  ],
+    DashboardPageRoutingModule,
+    MenuClientComponent
+],
   declarations: [DashboardPage]
 })
 export class DashboardPageModule {}

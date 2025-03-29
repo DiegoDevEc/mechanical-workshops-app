@@ -1,0 +1,23 @@
+<ion-content>
+  <ion-list-header>
+    <ion-label> Selecciona vehiculo </ion-label>
+  </ion-list-header>
+
+  @for (vehicule of vehicules; track vehicule; let index = $index) {
+  <ion-item-sliding>
+    <ion-item (click)="selectVehicule(vehicule)"  lines="full" [class.selected]="vehicule.id === selectedVehicule?.id">
+      <ion-label>
+        <h2>{{vehicule.plate}} </h2>
+        <p>Modelo: {{vehicule.model}}</p>
+        <p>Marca:: <b>{{vehicule.brand}}</b></p>
+      </ion-label>
+    </ion-item>
+  </ion-item-sliding>
+  }
+
+  <div class="buttons-container">
+    <ion-button fill="outline" (click)="goBack()">Atrás</ion-button>
+    <ion-button (click)="confirmVehicule()" [disabled]="!selectedVehicule">Continuar</ion-button>
+  </div>
+</ion-content>
+

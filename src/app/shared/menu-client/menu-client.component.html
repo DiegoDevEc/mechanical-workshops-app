@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <!-- Botón de hamburguesa -->
+    <ion-buttons slot="start">
+      <ion-button (click)="toggleSidebar()">
+        <ion-icon name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-img class="logo-mini" src="../../../assets/image.png" alt="Logo de la empresa"></ion-img>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Sidebar -->
+<div class="sidebar" [class.open]="isSidebarOpen">
+  <ion-list>
+    <!-- Titulo -->
+    <ion-item>
+      <ion-label>
+        <h3>Hola: <b>{{nameUser}}</b></h3>
+      </ion-label>
+    </ion-item>
+
+    <!-- Inicio -->
+    <ion-item button (click)="navigateTo('/dashboard/home-clients')">
+      <ion-icon name="home-outline" slot="start"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-item>
+
+
+    <!-- Citas -->
+    <ion-item button (click)="navigateTo('/dashboard/appointments-clients')">
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      <ion-label>Reservar</ion-label>
+    </ion-item>
+
+    <!-- Cerrar Sesion -->
+    <ion-item button (click)="navigateTo('/logout')">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      <ion-label>Cerrar Sesión</ion-label>
+    </ion-item>
+  </ion-list>
+</div>
+
+<!-- Overlay para cerrar el sidebar -->
+<div class="overlay" [class.open]="isSidebarOpen" (click)="toggleSidebar()"></div>
+
+<!-- Contenido principal -->
+<ion-content>
+  <!-- Tu contenido aquí -->
+</ion-content>

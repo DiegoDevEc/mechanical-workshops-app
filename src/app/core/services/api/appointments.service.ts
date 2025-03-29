@@ -29,4 +29,10 @@ export class AppointmentsService {
     const urlLocal = `${this.apiUrl}/appointments/all?page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}&status=${status}`;
      return this.http.get(urlLocal);
    }
+
+  registerAppointment(appointment: any) {
+    console.log(appointment);
+
+    return this.http.post(`${this.apiUrl}/appointments/register`, appointment);
+  }
 }

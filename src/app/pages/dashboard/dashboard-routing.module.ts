@@ -6,8 +6,20 @@ import { DashboardPage } from './dashboard.page';
 const routes: Routes = [
   {
     path: '',
-    component: DashboardPage
-  }
+    component: DashboardPage,
+    children: [
+      {
+        path: 'home-clients',
+        loadChildren: () => import('./pages/home-clients/home-clients.module').then( m => m.HomeClientsPageModule)
+      },
+      {
+        path: 'appointments-clients',
+        loadChildren: () => import('./pages/appointments-clients/appointments-clients.module').then( m => m.AppointmentsClientsPageModule)
+      },
+      { path: '', redirectTo: 'home-clients', pathMatch: 'full' },
+      { path: '**', redirectTo: '' }
+    ],
+  },
 ];
 
 @NgModule({
