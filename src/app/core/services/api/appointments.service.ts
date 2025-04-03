@@ -31,8 +31,6 @@ export class AppointmentsService {
    }
 
   registerAppointment(appointment: any) {
-    console.log(appointment);
-
     return this.http.post(`${this.apiUrl}/appointments/register`, appointment);
   }
 }

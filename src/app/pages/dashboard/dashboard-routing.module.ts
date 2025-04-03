@@ -16,6 +16,10 @@ const routes: Routes = [
         path: 'appointments-clients',
         loadChildren: () => import('./pages/appointments-clients/appointments-clients.module').then( m => m.AppointmentsClientsPageModule)
       },
+      {
+        path: 'attendances-clients',
+        loadChildren: () => import('./pages/attendances-clients/attendances-clients.module').then( m => m.AttendancesClientsPageModule)
+      },
       { path: '', redirectTo: 'home-clients', pathMatch: 'full' },
       { path: '**', redirectTo: '' }
     ],
