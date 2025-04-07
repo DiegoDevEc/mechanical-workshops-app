@@ -1,13 +1,9 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>dashboard-technician</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-app>
+  <app-menu-techniciant></app-menu-techniciant>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">dashboard-technician</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+  <ion-content [fullscreen]="false">
+    <ion-router-outlet></ion-router-outlet>
+  </ion-content>
+
+
+</ion-app>

@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-grid style="margin-top: 20px;">
+    <ion-row>
+      <ion-col size="12" v>
+        <ion-title>Dashboard</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="citas-agendadas">
+          <ion-card-header>
+            <ion-card-title>Citas Agendadas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            25
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card class="clientes">
+          <ion-card-header>
+            <ion-card-title>Número de Clientes</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            120
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="ventas">
+          <ion-card-header>
+            <ion-card-title>Total Ventas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            $15,000
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card class="citas-concretadas">
+          <ion-card-header>
+            <ion-card-title>Citas Concretadas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            18
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Lista de últimas citas -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Últimas Citas</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <h2>10:00 AM</h2>
+        <p>Juan Pérez</p>
+      </ion-label>
+      <ion-badge color="success">Concretada</ion-badge>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h2>11:30 AM</h2>
+        <p>María Gómez</p>
+      </ion-label>
+      <ion-badge color="warning">Pendiente</ion-badge>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h2>02:00 PM</h2>
+        <p>Carlos López</p>
+      </ion-label>
+      <ion-badge color="danger">Cancelada</ion-badge>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h2>04:00 PM</h2>
+        <p>Ana Martínez</p>
+      </ion-label>
+      <ion-badge color="success">Concretada</ion-badge>
+    </ion-item>
+  </ion-list>
+</ion-content>
