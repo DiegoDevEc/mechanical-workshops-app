@@ -8,12 +8,13 @@ import { AttendancesPageRoutingModule } from './attendances-routing.module';
 
 import { AttendancesPage } from './attendances.page';
 
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AttendancesPageRoutingModule
+    AttendancesPageRoutingModule,
   ],
   declarations: [AttendancesPage]
 })

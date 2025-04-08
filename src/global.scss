@@ -97,13 +97,17 @@ ion-content {
 }
 
 .bottom-controls-primary {
-  --background: rgba(242, 234, 234, 0.421);
-  --color: #3880ff;
+  --background: #3880ff;
+  --color: #ffffff;
 }
 
 .bottom-controls-danger {
-  --background: rgba(242, 234, 234, 0.421);
-  --color: #ff0000;
+  --background: rgba(237, 32, 32, 0.81);
+  --color: #ffffff;
+}
+.bottom-controls-success {
+  --background: #0a9700;
+  --color: #ffffff;
 }
 
 

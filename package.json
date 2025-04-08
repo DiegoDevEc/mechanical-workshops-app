@@ -33,7 +33,9 @@
     "@ionic/storage-angular": "^4.0.0",
     "angularx-qrcode": "^19.0.0",
     "cordova-sqlite-storage": "^7.0.0",
+    "ionic-input-mask": "^1.0.1",
     "ionicons": "^7.0.0",
+    "ngx-mask": "^19.0.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

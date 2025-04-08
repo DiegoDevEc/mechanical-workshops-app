@@ -17,6 +17,10 @@ export class AttendancesService {
     return this.http.put(`${this.apiUrl}/attendances/update/${attendance.id}`, attendance);
   }
 
+  updateAttendanceIngress(attendanceId: any) {
+    return this.http.put(`${this.apiUrl}/attendances/update-ingress/${attendanceId}`, {});
+  }
+
   deleteAttendance(attendanceId: any) {
     return this.http.delete(`${this.apiUrl}/attendances/cancel/${attendanceId}`);
   }
@@ -26,8 +30,9 @@ export class AttendancesService {
     return this.http.get(urlLocal);
   }
 
-  getAttendancesByTechnical(technicalId: string, page: number, size: number, text: string) {
-    const urlLocal = text ? `${this.apiUrl}/attendances/all-by-technical?clientId=${technicalId}&page=${page}&size=${size}&text=${text}` : `${this.apiUrl}/attendances/all-by-technical?clientId=${technicalId}&page=${page}&size=${size}`;
+  getAttendancesByTechnical(technicianId: string, page: number, size: number, text: string) {
+    const urlLocal = text ? `${this.apiUrl}/attendances/all-by-technical?technicianId=${technicianId}&page=${page}&size=${size}&status=${text}` :
+     `${this.apiUrl}/attendances/all-by-technical?technicianId=${technicianId}&page=${page}&size=${size}`;
     return this.http.get(urlLocal);
   }
 
