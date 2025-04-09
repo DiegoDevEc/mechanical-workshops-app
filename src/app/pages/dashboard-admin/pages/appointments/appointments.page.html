@@ -1,0 +1,269 @@
+<ion-header>
+  <app-header></app-header>
+  <ion-grid style="margin-top: 20px;">
+    <ion-row>
+      <ion-col size="12">
+        <ion-title>Citas Registradas</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content [fullscreen]="false">
+
+  <!-- Contenedor de los botones flotantes -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <div style="display: flex; flex-direction: row; gap: 10px;">
+      <!-- Botón para limpiar filtros -->
+      <ion-fab-button (click)="clearFilters()">
+        <ion-icon name="filter-outline"></ion-icon>
+      </ion-fab-button>
+
+      <!-- Botón para ir al inicio -->
+      <ion-fab-button (click)="scrollToTop()">
+        <ion-icon name="arrow-up-outline"></ion-icon>
+      </ion-fab-button>
+    </div>
+  </ion-fab>
+
+
+  <!-- Filtros -->
+  <ion-grid>
+
+    <ion-row>
+      <!-- Fecha Inicial -->
+      <ion-col size="6">
+        <ion-item>
+          <ion-label class="small-label">Desde:</ion-label>
+          <ion-text (click)="openModal(datetimeModalStart)" class="small-text-content">
+            {{ startDate ? (startDate | date: 'yyyy-MM-dd') : 'Seleccionar' }}
+          </ion-text>
+        </ion-item>
+        <ion-modal #datetimeModalStart>
+          <ng-template>
+            <ion-datetime id="datetime-finish" presentation="date"
+              (ionChange)="onStartDateChange($event); closeModal(datetimeModalStart)"
+              [showClearButton]="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+
+      <!-- Fecha Final -->
+      <ion-col size="6">
+        <ion-item>
+          <ion-label class="small-label">Hasta:</ion-label>
+          <ion-text (click)="openModal(datetimeModalFinish)" class="small-text-content">
+            {{ finishDate ? (finishDate | date: 'yyyy-MM-dd') : 'Seleccionar' }}
+          </ion-text>
+        </ion-item>
+        <ion-modal #datetimeModalFinish>
+          <ng-template>
+            <ion-datetime id="datetime-finish" presentation="date"
+              (ionChange)="onEndDateChange($event); closeModal(datetimeModalFinish)"
+              [showClearButton]="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>Estado:</ion-label>
+          <ion-select [(ngModel)]="statusFilter" (ionChange)="onStatusChange($event)">
+            <ion-select-option value="">Todos</ion-select-option>
+            <ion-select-option value="INGRESS">Ingresado</ion-select-option>
+            <ion-select-option value="PROGRESS">En Progreso</ion-select-option>
+            <ion-select-option value="FINISH">Finalizado</ion-select-option>
+            <ion-select-option value="CANCELED">Cancelado</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <ion-list>
+    @for (appointment of appointments; track appointment; let index = $index) {
+    <ion-item-sliding>
+      <ion-item lines="full">
+
+        <ion-label>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="title"><b>Cliente:</b> {{ appointment.client.firstname }} {{ appointment.client.lastname }}
+                </h2>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="6">
+                <h3><b>F. Reserva: {{appointment.dateAppointment}}</b></h3>
+              </ion-col>
+              <ion-col size="6">
+                <ion-badge [color]="getStatusColor(appointment.status)">
+                  <ng-container [ngSwitch]="appointment.status">
+                    <span *ngSwitchCase="'PROGRESS'">En Progreso</span>
+                    <span *ngSwitchCase="'INGRESS'">Ingresado</span>
+                    <span *ngSwitchCase="'FINISH'">Finalizado</span>
+                    <span *ngSwitchCase="'CANCELED'">Cancelado</span>
+                    <span *ngSwitchDefault>{{ appointment.status }}</span>
+                  </ng-container>
+                </ion-badge>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12">
+                <p><b>Vehículo:</b> {{ appointment.vehicle.brand }} - {{ appointment.vehicle.model }} - {{
+                  appointment.vehicle.year }}</p>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12">
+                <p><b>Placa:</b> {{ appointment.vehicle.plate }}</p>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="6">
+                <p><b>Fecha:</b> {{ appointment.availableAppointment.dateAvailable }}</p>
+              </ion-col>
+              <ion-col size="6">
+                <p><b>Hora:</b> {{ appointment.availableAppointment.timeAvailable }}</p>
+              </ion-col>
+            </ion-row>
+
+            @if (appointment.technician !== null) {
+            <ion-row>
+              <ion-col size="6">
+                <p><b>Técnico:</b> {{ appointment.technician.firstname }} {{ appointment.technician.lastname }}</p>
+              </ion-col>
+              <ion-col size="6">
+                <ng-container [ngSwitch]="appointment.statusAttendance">
+                  <p *ngSwitchCase="'PROGRESS'"><b>Atención: </b> En Progreso</p>
+                  <p *ngSwitchCase="'ASSIGN'"> <b>Atención: </b>Asignado</p>
+                  <p *ngSwitchCase="'NOTIFIED'"><b>Atención: </b> Notificado</p>
+                  <p *ngSwitchCase="'FINISH'"><b>Atención: </b> Finalizado</p>
+                  <p *ngSwitchCase="'CANCELED'"><b>Atención: </b> Cancelado</p>
+                  <p *ngSwitchDefault>{{ appointment.status }}</p>
+                </ng-container>
+              </ion-col>
+            </ion-row>
+            }
+
+            @if (appointment.service !== null) {
+            <ion-row>
+              <ion-col size="6">
+                <p><b>Servicio:</b> {{ appointment.service.description }}</p>
+              </ion-col>
+              <ion-col size="6">
+                <p><b>Precio:</b> ${{ appointment.service.cost }}</p>
+              </ion-col>
+            </ion-row>
+            }
+          </ion-grid>
+        </ion-label>
+
+      </ion-item>
+
+      <ion-item-options side="end">
+
+        <ion-item-option class="bottom-controls-primary"
+          *ngIf="appointment.statusAttendance === 'INGRESS' || appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
+          (click)="updateAppoiment(appointment)">
+          <ion-icon slot="icon-only" name="cog"></ion-icon>
+        </ion-item-option>
+
+        <ion-item-option class="bottom-controls-danger"
+          *ngIf="appointment.statusAttendance === 'INGRESS' ||appointment.statusAttendance === 'ASSIGN' || appointment.statusAttendance === 'PROGRESS'"
+          (click)="cancelAppoiment(appointment.id)">
+          <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+        </ion-item-option>
+
+      </ion-item-options>
+    </ion-item-sliding>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- Modal Con Formulario de Registro o Actualizacion -->
+
+  <ion-modal #openModalMppointments (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()" fill="clear" style="--color: #666;">
+              <ion-icon name="close-outline" style="font-size: 30px;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title style="font-size: small;">Asignar Servicio y Técnico</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" fill="clear" style="--color: #4CAF50;">
+              <ion-icon name="checkmark-outline" style="font-size: 30x;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+
+        <div class="login-container">
+          <ion-item>
+            <ion-label position="floating"><b>Cliente: </b> {{appointment?.client?.firstname}}
+              {{appointment?.client?.lastname}}</ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating"><b>Cédula: </b> {{appointment?.client?.identification}}</ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating"><b>Email: </b> {{appointment?.client?.email}}</ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating"><b>Número de teléfono: </b> {{appointment?.client?.phone}}</ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating"><b>Fecha: </b> {{appointment?.availableAppointment?.dateAvailable}} <b>Hora:
+              </b> {{appointment?.availableAppointment?.timeAvailable}}</ion-label>
+          </ion-item>
+
+          <ion-text style="padding: 20px;" color="primary" class="info-text">
+            <p><b>** Por favor, complete la siguiente información:</b></p>
+          </ion-text>
+
+          <ion-item class="highlight">
+            <ion-label position="floating">Servicio</ion-label>
+            <ion-select [(ngModel)]="selectService">
+              <ion-select-option *ngFor="let service of services" [value]="service.id">
+                {{ service.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item class="highlight">
+            <ion-label position="floating">Técnico</ion-label>
+            <ion-select [(ngModel)]="selectTechnical">
+              <ion-select-option *ngFor="let technician of technicians" [value]="technician.personId">
+                {{ technician.firstname }} {{ technician.lastname }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+
+        </div>
+
+      </ion-content>
+
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

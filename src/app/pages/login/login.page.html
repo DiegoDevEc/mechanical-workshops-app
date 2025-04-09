@@ -1,0 +1,27 @@
+
+<ion-content class="ion-padding">
+  <ion-img class="logo" src="../../../assets/image.png" alt="Logo de la empresa"></ion-img>
+
+  <div class="login-container">
+    <ion-item>
+      <ion-label position="floating">Número de teléfono</ion-label>
+      <ion-input type="tel" [(ngModel)]="phoneNumber"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="login()">Iniciar sesión</ion-button>
+
+    <div class="forgot-password">
+      <a href="#">¿Olvidaste tu contraseña?</a>
+    </div>
+
+    <div class="register-link">
+      <p>¿No tienes una cuenta? <a (click)="singUp()">Regístrate</a></p>
+    </div>
+
+  </div>
+</ion-content>

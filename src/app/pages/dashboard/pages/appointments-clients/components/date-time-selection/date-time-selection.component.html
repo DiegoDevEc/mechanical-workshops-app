@@ -1,0 +1,46 @@
+<!-- date-time-selection.component.html -->
+<ion-content [fullscreen]="true" class="datetime-content">
+  <div class="content-wrapper">
+    <div class="month-header">
+      <div class="days-container">
+        <div class="days-scroll">
+          @if (days.length > 0) {
+          @for (day of days; track day) {
+          <div class="day-item" [class.selected]="day.selected" (click)="selectDay(day)">
+            <span class="day-name">{{day.month}}</span>
+            <span class="day-number">{{day.day}}</span>
+            <span class="day-name">{{day.dayName }}</span>
+
+          </div>
+          }}
+        </div>
+      </div>
+      <h6>{{ currentMonth }}</h6>
+    </div>
+
+    <div class="time-slots">
+      <div class="time-header">
+        <span>Hora</span>
+        <div class="status-legend">
+          <span class="free">Libre</span>
+          <span class="reserved">Reservada</span>
+          <span class="selected-tittle">Seleccionada</span>
+        </div>
+      </div>
+
+      <ion-list class="time-list">
+        @for (slot of timeSlots; track slot) {
+        <ion-item [class.reserved]="slot.reserved" [class.selected]="slot.selected" (click)="selectTimeSlot(slot)">
+          <ion-label><b>Hora: </b> {{slot.start}} &nbsp;&nbsp;&nbsp;  <b>Código: </b>{{slot.code}}</ion-label>
+        </ion-item>
+        }
+      </ion-list>
+    </div>
+  </div>
+
+  <div class="action-button">
+    <ion-button expand="block" (click)="confirmSelection()" [disabled]="!selectedTimeSlot">
+      Continuar
+    </ion-button>
+  </div>
+</ion-content>

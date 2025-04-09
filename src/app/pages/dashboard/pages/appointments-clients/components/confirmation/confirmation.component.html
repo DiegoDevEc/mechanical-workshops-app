@@ -1,0 +1,61 @@
+<ion-content class="confirmation-content">
+  <div class="confirmation-container ion-padding">
+
+    <ion-card class="reservation-card">
+      <ion-card-header>
+        <ion-card-title>Detalles de tu reserva</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-icon slot="start" name="calendar"></ion-icon>
+          <ion-label>
+            <h3>Fecha</h3>
+            <p>{{ reservationData.dateTime?.date  }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon slot="start" name="time"></ion-icon>
+          <ion-label>
+            <h3>Horario</h3>
+            <p>{{ reservationData.dateTime?.startTime }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon slot="start" name="car"></ion-icon>
+          <ion-label>
+            <h3>Servicio</h3>
+            <p>{{ reservationData.service?.name }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none" class="qr-container">
+          <ion-label class="qr-label">
+            <qrcode [qrdata]="reservationData.dateTime.code" [width]="180" [errorCorrectionLevel]="'M'">
+            </qrcode>
+            <p class="qr-text">{{ reservationData.dateTime.code }}</p>
+          </ion-label>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+    <div class="buttons-container">
+      <ion-button expand="block" color="light" (click)="finish()">
+        <ion-icon slot="start" name="print"></ion-icon>
+        Finalizar
+      </ion-button>
+    </div>
+
+
+    <div class="instructions ion-padding" style="font-size: xx-small;">
+      <h4>Instrucciones importantes:</h4>
+      <ul>
+        <li>Presenta este código al llegar al garaje</li>
+        <li>Llega 10 minutos antes de tu horario reservado</li>
+        <li>En caso de cancelación, contáctanos con 24h de anticipación</li>
+      </ul>
+    </div>
+  </div>
+</ion-content>

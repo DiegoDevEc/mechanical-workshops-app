@@ -1,0 +1,26 @@
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Selecciona un servicio</ion-label>
+    </ion-list-header>
+
+    @for (service of services; track $index) {
+
+    <ng-container>
+      <ion-item (click)="selectService(service)">
+        <ion-label [class.selected]="service.id === selectedService?.id">
+          <h1>{{ service.name }}</h1>
+          <h5>{{ service.description }}</h5>
+          <h5>{{ service.price }}</h5>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+    }
+
+  </ion-list>
+
+  <div class="buttons-container">
+    <ion-button fill="outline" (click)="goBack()">Atrás</ion-button>
+    <ion-button (click)="confirmService()" [disabled]="!selectedService">Continuar</ion-button>
+  </div>
+</ion-content>

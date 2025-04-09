@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "917379843859",
+    "project_id": "mechanical-workshops",
+    "storage_bucket": "mechanical-workshops.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917379843859:android:60bd3363c1afdebf45fce6",
+        "android_client_info": {
+          "package_name": "com.mechanical"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiZiqYYj6ccjFI4fy0b5EA498tTU_VZms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,156 @@
+
+/* garage-reservation.page.scss */
+.month-header {
+  text-align: center;
+  padding: 16px;
+
+  h2 {
+    margin-bottom: 16px;
+    font-weight: bold;
+  }
+
+  .days-row {
+    display: flex;
+    justify-content: space-around;
+
+    span {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+
+      &.selected {
+        background-color: var(--ion-color-primary);
+        color: white;
+      }
+    }
+  }
+}
+
+.time-slots {
+  .time-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    align-items: center;
+    background-color: #f5f5f5;
+
+    .status-legend {
+      display: flex;
+      gap: 12px;
+
+      .free {
+        color: var(--ion-color-success);
+      }
+
+      .reserved {
+        color: var(--ion-color-danger);
+      }
+
+      .selected-tittle {
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+}
+
+ion-item {
+  &.reserved {
+    --background: rgba(var(--ion-color-danger-rgb), 0.1);
+    --color: var(--ion-color-danger);
+  }
+
+  &.selected {
+    --background: rgba(var(--ion-color-primary-rgb), 0.1);
+    --color: var(--ion-color-primary);
+    font-weight: bold;
+  }
+}
+
+.datetime-content {
+  --padding-bottom: 80px; /* Espacio para el botón */
+  position: relative;
+  height: 100%;
+}
+
+.content-wrapper {
+  padding-bottom: 16px; /* Espacio adicional al final */
+}
+
+.time-list {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.action-button {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, var(--ion-background-color) 70%, transparent);
+  z-index: 10;
+
+  ion-button {
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Ajustes para iOS (notch) */
+.ios .action-button {
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  bottom: env(safe-area-inset-bottom);
+}
+
+
+.days-container {
+  margin: 12px 0;
+  padding: 4px 0;
+}
+
+.days-scroll {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  gap: 8px;
+  padding: 4px 16px;
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+}
+
+.day-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  background: var(--ion-color-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0; /* Evita que se reduzcan los items */
+
+  &.selected {
+    background: var(--ion-color-primary);
+    color: white;
+    font-weight: bold;
+  }
+
+  .day-number {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .day-name {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+}

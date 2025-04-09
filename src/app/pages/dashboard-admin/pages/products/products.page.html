@@ -1,0 +1,111 @@
+<ion-header>
+  <app-header></app-header>
+  <ion-grid style="margin-top: 20px;">
+    <ion-row>
+      <ion-col size="12" v>
+        <ion-title>Productos</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-searchbar placeholder="Buscar" [(ngModel)]="text" (ionBlur)="search()" (keyup.enter)="search()"
+    (ionClear)="search()">
+  </ion-searchbar>
+</ion-header>
+
+<ion-content [fullscreen]="false">
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button id="open-modal-product" color="success">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list>
+    @for (product of products; track product; let index = $index) {
+    <ion-item-sliding>
+      <ion-item lines="full">
+        <ion-label>
+          <h2>{{product.name}} </h2>
+          <p>Descripción: {{product.description}}</p>
+          <p>Categoria: <b>{{product.category.name}}</b></p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option class="bottom-controls-primary" (click)="updateProduct(product)">
+          <ion-icon slot="icon-only" name="pencil"></ion-icon>
+        </ion-item-option>
+        <ion-item-option class="bottom-controls-danger" (click)="deleteProduct(product.id)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- Modal Con Formulario de Registro o Actualizacion -->
+
+  <ion-modal trigger="open-modal-product" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()" fill="clear" style="--color: #ce2323;">
+              <ion-icon name="close-outline" style="font-size: 30px;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title style="font-size: small;">{{title}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" fill="clear" style="--color: #4CAF50;">
+              <ion-icon name="checkmark-outline" style="font-size: 30x;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+
+        <form [formGroup]="productsForm" (ngSubmit)="register()">
+          <div class="login-container">
+            <ion-item>
+              <ion-label position="floating">Nombre</ion-label>
+              <ion-input id="name" type="text" formControlName="name"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Descripcion</ion-label>
+              <ion-input id="description" type="text" formControlName="description"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Precio</ion-label>
+              <ion-input id="price" type="text" formControlName="price"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Stock</ion-label>
+              <ion-input id="stock" type="text" formControlName="stock"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Categoría</ion-label>
+              <ion-select formControlName="categoryId">
+                <ion-select-option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+          </div>
+        </form>
+
+      </ion-content>
+
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

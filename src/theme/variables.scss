@@ -1,0 +1,27 @@
+:root {
+
+  --ion-background-color: #ffffff; /* Fondo blanco */
+  --ion-text-color: #666666; /* Texto negro */
+
+  --ion-color-primary: #0253B3;
+  --ion-color-primary-rgb: 2, 83, 179;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #024aa1;
+  --ion-color-primary-tint: #2067be;
+
+  --ion-color-secondary: #7D848D;
+  --ion-color-secondary-rgb: 125, 132, 141;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #6f767e;
+  --ion-color-secondary-tint: #8b9098;
+}
+
+/* Forzar modo claro en todo el sistema */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-background-color: #ffffff;
+    --ion-text-color: #666666;
+  }
+}

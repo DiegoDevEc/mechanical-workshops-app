@@ -1,0 +1,145 @@
+<ion-header>
+  <app-header></app-header>
+  <ion-grid style="margin-top: 20px;">
+    <ion-row>
+      <ion-col size="12" v>
+        <ion-title>Clientes</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-searchbar placeholder="Buscar" [(ngModel)]="text" (ionBlur)="search()" (keyup.enter)="search()"
+    (ionClear)="search()">
+  </ion-searchbar>
+</ion-header>
+
+<ion-content [fullscreen]="false">
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button id="open-modal-clients" color="success">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list>
+    @for (client of clients; track client; let index = $index) {
+    <ion-item-sliding>
+      <ion-item lines="full">
+        <ion-label>
+          <h2>{{client.username}} </h2>
+          <p>Nombre: {{client.firstname}} {{client.lastname}} </p>
+          <p>CI: {{client.identification}}</p>
+          <p>Teléfono: {{client.phone}}</p>
+          <p>Email: {{client.email}}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option class="bottom-controls-primary" (click)="updateClient(client)">
+          <ion-icon slot="icon-only" name="pencil"></ion-icon>
+        </ion-item-option>
+        <ion-item-option class="bottom-controls-danger" (click)="deleteClient(client.id)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- Modal Con Formulario de Registro o Actualizacion -->
+
+  <ion-modal trigger="open-modal-clients" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()" fill="clear" style="--color: #666;">
+              <ion-icon name="close-outline" style="font-size: 30px;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title style="font-size: small;">{{title}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" fill="clear" style="--color: #4CAF50;">
+              <ion-icon name="checkmark-outline" style="font-size: 30x;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+
+        <form [formGroup]="clientsForm" (ngSubmit)="register()">
+          <div class="login-container">
+            <ion-item>
+              <ion-label position="floating">Nombre</ion-label>
+              <ion-input id="firstname" type="text" formControlName="firstname"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Apellido</ion-label>
+              <ion-input id="lastname" type="text" formControlName="lastname"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Username</ion-label>
+              <ion-input id="username" type="text" formControlName="username"
+                (ionBlur)="validateUsername()"></ion-input>
+              <ion-note *ngIf="clientsForm.get('username')?.errors?.['usernameRegistered']" color="danger">
+                El username ya se encuentra registrado.
+              </ion-note>
+              <ion-note *ngIf="clientsForm.get('username')?.errors?.['serverError']" color="danger">
+                Error al consultar la información.
+              </ion-note>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Cédula</ion-label>
+              <ion-input id="identification" type="text" formControlName="identification"
+                (ionBlur)="validateIdentification()"></ion-input>
+              <ion-note *ngIf="clientsForm.get('identification')?.errors?.['identificationRegistered']"
+                color="danger">
+                La cédula ya se encuentra registrado con otro usuario.
+              </ion-note>
+              <ion-note *ngIf="clientsForm.get('identification')?.errors?.['serverError']" color="danger">
+                Error al consultar la información.
+              </ion-note>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input id="email" type="email" formControlName="email" (ionBlur)="validateEmail()"></ion-input>
+              <ion-note *ngIf="clientsForm.get('email')?.errors?.['emailRegistered']" color="danger">
+                El email ya se encuentra registrado con otro usuario.
+              </ion-note>
+              <ion-note *ngIf="clientsForm.get('email')?.errors?.['serverError']" color="danger">
+                Error al consultar la información.
+              </ion-note>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Número de teléfono</ion-label>
+              <ion-input id="phone" type="tel" formControlName="phone" (ionBlur)="validatePhone()"></ion-input>
+              <ion-note *ngIf="clientsForm.get('phone')?.errors?.['phoneRegistered']" color="danger">
+                El número de teléfono ya se encuentra registrado con otro usuario.
+              </ion-note>
+              <ion-note *ngIf="clientsForm.get('phone')?.errors?.['serverError']" color="danger">
+                Error al consultar la información.
+              </ion-note>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Dirección</ion-label>
+              <ion-input id="address" type="text" formControlName="address"></ion-input>
+            </ion-item>
+          </div>
+        </form>
+
+      </ion-content>
+
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

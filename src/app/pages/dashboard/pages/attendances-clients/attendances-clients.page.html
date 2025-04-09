@@ -1,0 +1,123 @@
+<ion-header>
+  <ion-grid style="margin-top: 20px;">
+    <ion-row>
+      <ion-col size="12" v>
+        <ion-title>Reservas</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content [fullscreen]="false">
+
+  <!-- Contenedor de los botones flotantes -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <div style="display: flex; flex-direction: row; gap: 10px;">
+      <!-- Botón para limpiar filtros -->
+      <ion-fab-button (click)="clearFilters()">
+        <ion-icon name="filter-outline"></ion-icon>
+      </ion-fab-button>
+
+      <!-- Botón para ir al inicio -->
+      <ion-fab-button (click)="scrollToTop()">
+        <ion-icon name="arrow-up-outline"></ion-icon>
+      </ion-fab-button>
+    </div>
+  </ion-fab>
+
+
+  <!-- Filtros -->
+  <ion-grid>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>Estado:</ion-label>
+          <ion-select [(ngModel)]="statusFilter" (ionChange)="onStatusChange($event)">
+            <ion-select-option value="">Todos</ion-select-option>
+            <ion-select-option value="INGRESS">Ingresado</ion-select-option>
+            <ion-select-option value="PROGRESS">En Progreso</ion-select-option>
+            <ion-select-option value="FINISH">Finalizado</ion-select-option>
+            <ion-select-option value="CANCELED">Cancelado</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <ion-list>
+    @for (attendance of attendances; track attendance; let index = $index) {
+    <ion-item-sliding>
+      <ion-item lines="full">
+
+        <ion-label>
+          <ion-grid>
+
+            <ion-row>
+              <ion-col size="6">
+                <h3><b>Código:</b> {{attendance.code}}</h3>
+              </ion-col>
+              <ion-col size="6">
+                <ion-badge [color]="getStatusColor(attendance.status)">
+                  <ng-container [ngSwitch]="attendance.status">
+                    <span *ngSwitchCase="'PROGRESS'">En Progreso</span>
+                    <span *ngSwitchCase="'INGRESS'">Ingresado</span>
+                    <span *ngSwitchCase="'FINISH'">Finalizado</span>
+                    <span *ngSwitchCase="'CANCELED'">Cancelado</span>
+                    <span *ngSwitchDefault>{{ attendance.status }}</span>
+                  </ng-container>
+                </ion-badge>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="6">
+                <h3><b>F. Inicio: {{attendance.startDate}}</b></h3>
+              </ion-col>
+              <ion-col size="6">
+                <h3><b>F. Fin: {{attendance.endDate}}</b></h3>
+              </ion-col>
+
+            </ion-row>
+
+
+            @if (attendance.technician !== null) {
+            <ion-row>
+              <ion-col size="12">
+                <p><b>Técnico:</b> {{ attendance.technician.firstname }} {{ attendance.technician.lastname }}</p>
+              </ion-col>
+            </ion-row>
+            }
+
+            @if (attendance.service !== null) {
+            <ion-row>
+              <ion-col size="6">
+                <p><b>Servicio:</b> {{ attendance.service.description }}</p>
+              </ion-col>
+              <ion-col size="6">
+                <p><b>Precio:</b> ${{ attendance.service.cost }}</p>
+              </ion-col>
+            </ion-row>
+            }
+          </ion-grid>
+        </ion-label>
+
+      </ion-item>
+
+      <ion-item-options side="end">
+
+        <ion-item-option class="bottom-controls-danger"
+          *ngIf="attendance.status === 'INGRESS' || attendance.status === 'ASSIGN'"
+          (click)="cancelAttendance(attendance.id)">
+          <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+        </ion-item-option>
+
+      </ion-item-options>
+    </ion-item-sliding>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

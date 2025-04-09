@@ -1,0 +1,89 @@
+
+<ion-content class="ion-padding">
+  <ion-img class="logo" src="../../../assets/image.png" alt="Logo de la empresa"></ion-img>
+
+  <div class="text-subtitle">
+    <p>Por favor complete los datos y cree una cuenta.</p>
+  </div>
+
+  <form [formGroup]="signupForm" (ngSubmit)="register()">
+    <div class="login-container">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input id="firstname" type="text" formControlName="firstname"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Apellido</ion-label>
+        <ion-input id="lastname" type="text" formControlName="lastname"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input id="username" type="text" formControlName="username" (ionBlur)="validateUsername()"></ion-input>
+        <ion-note *ngIf="signupForm.get('username')?.errors?.['usernameRegistered']" color="danger">
+          El username ya se encuentra registrado.
+        </ion-note>
+        <ion-note *ngIf="signupForm.get('username')?.errors?.['serverError']" color="danger">
+          Error al consultar la información.
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Cédula</ion-label>
+        <ion-input id="identification" type="text" formControlName="identification" (ionBlur)="validateIdentification()"></ion-input>
+        <ion-note *ngIf="signupForm.get('identification')?.errors?.['identificationRegistered']" color="danger">
+          La cédula ya se encuentra registrado con otro usuario.
+        </ion-note>
+        <ion-note *ngIf="signupForm.get('identification')?.errors?.['serverError']" color="danger">
+          Error al consultar la información.
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input id="email" type="email" formControlName="email"
+        (ionBlur)="validateEmail()"></ion-input>
+        <ion-note *ngIf="signupForm.get('email')?.errors?.['emailRegistered']" color="danger">
+          El email ya se encuentra registrado con otro usuario.
+        </ion-note>
+        <ion-note *ngIf="signupForm.get('email')?.errors?.['serverError']" color="danger">
+          Error al consultar la información.
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Número de teléfono</ion-label>
+        <ion-input id="phone"
+          type="tel"
+          formControlName="phone"
+          (ionBlur)="validatePhone()"
+        ></ion-input>
+        <ion-note *ngIf="signupForm.get('phone')?.errors?.['phoneRegistered']" color="danger">
+          El número de teléfono ya se encuentra registrado con otro usuario.
+        </ion-note>
+        <ion-note *ngIf="signupForm.get('phone')?.errors?.['serverError']" color="danger">
+          Error al consultar la información.
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-input id="address" type="text" formControlName="address"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input id="password" type="password" formControlName="password"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" type="submit" [disabled]="signupForm.invalid">
+        Registrarse
+      </ion-button>
+
+      <ion-button expand="block" color="secondary" (click)="cancel()">
+        Cancelar
+      </ion-button>
+    </div>
+  </form>
+</ion-content>
