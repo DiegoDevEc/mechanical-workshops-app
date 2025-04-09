@@ -18,7 +18,11 @@ import { AuthInterceptor } from './core/services/interceptor/auth.interceptor';
   imports: [BrowserModule, IonicModule.forRoot(),
     AppRoutingModule, HttpClientModule,  // Importa el módulo de InputMask
     IonicStorageModule.forRoot()],
+<<<<<<< HEAD
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, UserService,  // Servicios de usuario
+=======
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, UserService,  // Servicio de usuario
+>>>>>>> 99ff7a40df1c2cce425cc797d65d56d9d0486b8b
   {
     provide: HTTP_INTERCEPTORS, // Registra el interceptor HTTP
     useClass: AuthInterceptor, // Usa la clase AuthInterceptor
