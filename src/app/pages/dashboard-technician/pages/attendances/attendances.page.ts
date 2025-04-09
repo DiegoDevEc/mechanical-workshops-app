@@ -72,7 +72,9 @@ export class AttendancesPage implements OnInit {
         {
           text: 'Sí, Iniciar',
           handler: async () => {
-            this.attendancesService.updateAttendanceIngress(attendance.id).subscribe(
+            console.log(attendance);
+
+            this.attendancesService.updateAttendanceIngress(attendance.code).subscribe(
               (response: any) => {
                 this.messageService.presentToast('Cita Iniciada', 'success');
                 this.chargeInformation();
@@ -149,22 +151,16 @@ export class AttendancesPage implements OnInit {
     await loading.present();
 
     try {
-
-
       const userData = await this.authService.getUserData();
       const clientId = userData.keyId;
 
       const statusValue = this.statusFilter === '' ? '' : this.statusFilter;
 
       const data: any = await this.attendancesService
-        .getAttendancesByTechnical(clientId, this.pages, this.size, statusValue)
+        .getAttendancesByTechnicalAssignated(clientId, this.pages, this.size, statusValue)
         .toPromise();
       this.pageResponse = data;
       this.attendances = data.content;
-
-      console.log(data);
-
-
     } catch (error: any) {
       this.messageService.presentToast('Error al cargar la información: ' + error.error.message, 'danger');
       if (error.error.message.includes('token')) {
@@ -186,22 +182,14 @@ export class AttendancesPage implements OnInit {
       return;
     }
 
-    console.log(this.attendance);
-
-
-    if (!this.attendance.startDate) {
-      this.messageService.presentToast('Debe ingresar la fecha de ingreso', 'warning');
+    if (!this.attendance.comments) {
+      this.messageService.presentToast('Debe ingresar el detalle del servicio', 'warning');
       return;
     }
 
-    if (!this.attendance.startTime) {
-      this.messageService.presentToast('Debe ingresar la hora de ingreso', 'warning');
-      return;
-    }
-
-    this.attendancesService.updateAttendance(this.attendance).subscribe(
+    this.attendancesService.updateAttendanceFinalize(this.attendance.code, this.attendance).subscribe(
       (response) => {
-        this.messageService.presentToast('Cita actualizada - Turno en progreso', 'success');
+        this.messageService.presentToast('Cita actualizada - Turno en finalizado', 'success');
         this.chargeInformation();
       },
       (error) => {

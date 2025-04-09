@@ -121,11 +121,10 @@
         </ion-item-option>
       </ion-item-options>
 
-
       <ion-item-options side="end">
         <ion-item-option class="bottom-controls-danger"
           *ngIf="attendance.status === 'INGRESS' || attendance.status === 'ASSIGN'"
-          (click)="cancelAttendance(attendance.id)">
+          (click)="cancelAttendance(attendance.code)">
           <ion-icon slot="icon-only" name="close-circle"></ion-icon>
         </ion-item-option>
       </ion-item-options>

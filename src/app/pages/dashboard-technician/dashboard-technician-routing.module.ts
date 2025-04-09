@@ -17,6 +17,10 @@ const routes: Routes = [
         path: 'attendances-technician',
         loadChildren: () => import('./pages/attendances/attendances.module').then( m => m.AttendancesPageModule)
       },
+      {
+        path: 'attendances-history',
+        loadChildren: () => import('./pages/attendances-history/attendances-history.module').then( m => m.AttendancesHistoryPageModule)
+      },
       { path: '', redirectTo: 'home-technician', pathMatch: 'full' },
       { path: '**', redirectTo: '' }
     ],

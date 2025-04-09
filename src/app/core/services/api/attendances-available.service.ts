@@ -21,6 +21,10 @@ export class AttendancesService {
     return this.http.put(`${this.apiUrl}/attendances/update-ingress/${attendanceId}`, {});
   }
 
+  updateAttendanceFinalize(attendanceId: any, attendance: any) {
+    return this.http.put(`${this.apiUrl}/attendances/update-finalize-service/${attendanceId}`, attendance);
+  }
+
   deleteAttendance(attendanceId: any) {
     return this.http.delete(`${this.apiUrl}/attendances/cancel/${attendanceId}`);
   }
@@ -31,8 +35,14 @@ export class AttendancesService {
   }
 
   getAttendancesByTechnical(technicianId: string, page: number, size: number, text: string) {
-    const urlLocal = text ? `${this.apiUrl}/attendances/all-by-technical?technicianId=${technicianId}&page=${page}&size=${size}&status=${text}` :
-     `${this.apiUrl}/attendances/all-by-technical?technicianId=${technicianId}&page=${page}&size=${size}`;
+    const urlLocal = text ? `${this.apiUrl}/attendances/all-by-technical-assigned?technicianId=${technicianId}&page=${page}&size=${size}&status=${text}` :
+     `${this.apiUrl}/attendances/all-by-technical-assigned?technicianId=${technicianId}&page=${page}&size=${size}`;
+    return this.http.get(urlLocal);
+  }
+
+  getAttendancesByTechnicalAssignated(technicianId: string, page: number, size: number, text: string) {
+    const urlLocal = text ? `${this.apiUrl}/attendances/all-by-technical-assigned?technicianId=${technicianId}&page=${page}&size=${size}&status=${text}` :
+     `${this.apiUrl}/attendances/all-by-technical-assigned?technicianId=${technicianId}&page=${page}&size=${size}`;
     return this.http.get(urlLocal);
   }
 
