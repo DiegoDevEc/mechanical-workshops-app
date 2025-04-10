@@ -13,7 +13,9 @@ import { DashboardService } from 'src/app/core/services/api/dashboard.service';
 })
 export class HomeTechnicianPage implements OnInit {
 
-  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  @ViewChild('doughnutChart') doughnutChart?: BaseChartDirective;
+  @ViewChild('lineChart') lineChart?: BaseChartDirective;
+
 
   public pieChartType: ChartType = 'line';
 
@@ -49,16 +51,14 @@ export class HomeTechnicianPage implements OnInit {
         color: '#FFFFFF', // Color del texto
         font: {
           weight: 'bold',
-          size: 14
+          size: 16
         },
-        formatter: (value: number, ctx: any) => {
-          return value; // Muestra el valor directamente
-          // Opcional: Mostrar porcentaje
+        formatter: (value: any, ctx: any) => {
           const total = ctx.dataset.data.reduce((a: any, b: any) => a + b, 0);
-           return `${value} (${Math.round((value / total) * 100)}%)`;
+          const percentage = (value / total) * 100;
+           return `${value} (${percentage.toFixed(2)}%)`;
         }
       },
-      // Configuración de la leyenda (opcional)
       legend: {
         display: true,
         position: 'bottom'
@@ -87,16 +87,31 @@ export class HomeTechnicianPage implements OnInit {
       entityId: technicianId,
       startDate: this.startDate, endDate: this.endDate
     }).subscribe((response: any) => {
+      console.log(response);
+
       const dataStatus = response.data.dataStatus;
+      const finishValueMount = response.data.finishValueMount;
       if (dataStatus) {
-        const labels = Object.keys(response.data.dataStatus);
-        const dataStatusValues = Object.values(response.data.dataStatus).map(value => Number(value));
+        const labels = Object.keys(dataStatus);
+        const dataStatusValues = Object.values(dataStatus).map(value => Number(value));
         this.citaChartData.labels?.pop();
         this.citaChartData.datasets[0].data?.pop();
         this.citaChartData.labels = labels;
         this.citaChartData.datasets[0].data = dataStatusValues;
-        this.chart?.update();
+        this.doughnutChart?.update();
       }
+
+
+      if (finishValueMount) {
+        const labels = Object.keys(finishValueMount);
+        const dataStatusValues = Object.values(finishValueMount).map(value => Number(value));
+        this.pieChartData.labels?.pop();
+        this.pieChartData.datasets[0].data?.pop();
+        this.pieChartData.labels = labels;
+        this.pieChartData.datasets[0].data = dataStatusValues;
+        this.lineChart?.update();
+      }
+
     });
   }
 

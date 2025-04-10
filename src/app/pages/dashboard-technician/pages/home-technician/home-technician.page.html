@@ -59,7 +59,7 @@
     <ion-row>
       <ion-col size="12">
         <div style="display: block;">
-          <canvas baseChart #baseChart="base-chart" [data]="citaChartData" [type]="citaChartType"
+          <canvas baseChart #doughnutChart="base-chart" [data]="citaChartData" [type]="citaChartType"
           [options]="citaChartOptions">
           </canvas>
         </div>
@@ -73,7 +73,7 @@
     <ion-row>
       <ion-col size="12">
         <div style="display: block;">
-          <canvas baseChart [data]="pieChartData" [type]="pieChartType">
+          <canvas baseChart #lineChart="base-chart" [data]="pieChartData" [type]="pieChartType">
           </canvas>
         </div>
       </ion-col>

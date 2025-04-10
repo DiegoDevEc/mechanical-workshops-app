@@ -33,6 +33,7 @@
     "@ionic/storage-angular": "^4.0.0",
     "angularx-qrcode": "^19.0.0",
     "chart.js": "^4.4.8",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "cordova-sqlite-storage": "^7.0.0",
     "ionic-input-mask": "^1.0.1",
     "ionicons": "^7.0.0",
