@@ -1,7 +1,7 @@
 <ion-header>
   <ion-grid style="margin-top: 20px;">
     <ion-row>
-      <ion-col size="12" >
+      <ion-col size="12">
         <ion-title>Dashboard</ion-title>
       </ion-col>
     </ion-row>
@@ -60,14 +60,27 @@
       <ion-col size="12">
         <div style="display: block;">
           <canvas baseChart #doughnutChart="base-chart" [data]="citaChartData" [type]="citaChartType"
-          [options]="citaChartOptions">
+            [options]="citaChartOptions">
           </canvas>
         </div>
       </ion-col>
     </ion-row>
+    <div style="height: 50px;">
+    </div>
     <ion-row>
       <ion-col size="12">
-        <h2>Finalizadas</h2>
+        <h2>Finalizadas por mes</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <!-- Select de Año -->
+        <ion-item>
+          <ion-label position="stacked">Año</ion-label>
+          <ion-select [(ngModel)]="selectedYear" (ionChange)="onYearChange($event)">
+            <ion-select-option *ngFor="let year of years" [value]="year">{{ year }}</ion-select-option>
+          </ion-select>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -79,7 +92,16 @@
       </ion-col>
     </ion-row>
 
+    <ion-list>
+      <ion-item *ngFor="let item of dataList">
+        <ion-label>
+          {{ item.mes | titlecase }}: {{ item.cantidad }}
+        </ion-label>
+      </ion-item>
+    </ion-list>
 
+    <div style="height: 50px;">
+    </div>
   </ion-grid>
 
 </ion-content>

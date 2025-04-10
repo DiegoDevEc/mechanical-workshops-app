@@ -13,8 +13,14 @@ import { DashboardService } from 'src/app/core/services/api/dashboard.service';
 })
 export class HomeTechnicianPage implements OnInit {
 
+
+  years: number[] = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010];
+  selectedYear: number = new Date().getFullYear();
+
   @ViewChild('doughnutChart') doughnutChart?: BaseChartDirective;
   @ViewChild('lineChart') lineChart?: BaseChartDirective;
+
+  dataList: { mes: string, cantidad: number }[] = [];
 
 
   public pieChartType: ChartType = 'line';
@@ -56,7 +62,7 @@ export class HomeTechnicianPage implements OnInit {
         formatter: (value: any, ctx: any) => {
           const total = ctx.dataset.data.reduce((a: any, b: any) => a + b, 0);
           const percentage = (value / total) * 100;
-           return `${value} (${percentage.toFixed(2)}%)`;
+          return `${value} (${percentage.toFixed(2)}%)`;
         }
       },
       legend: {
@@ -85,7 +91,7 @@ export class HomeTechnicianPage implements OnInit {
 
     this.dashboardService.getDashboardByTechnician({
       entityId: technicianId,
-      startDate: this.startDate, endDate: this.endDate
+      startDate: this.startDate, endDate: this.endDate, year: this.selectedYear
     }).subscribe((response: any) => {
       console.log(response);
 
@@ -110,6 +116,14 @@ export class HomeTechnicianPage implements OnInit {
         this.pieChartData.labels = labels;
         this.pieChartData.datasets[0].data = dataStatusValues;
         this.lineChart?.update();
+        console.log(finishValueMount);
+
+
+        this.dataList = Object.entries(finishValueMount).map(([mes, cantidad]) => ({
+          mes,
+          cantidad: cantidad as number // forzamos que cantidad es number
+        }));
+
       }
 
     });
@@ -150,6 +164,11 @@ export class HomeTechnicianPage implements OnInit {
     currentDate.setDate(currentDate.getDate() - 30);
     const formattedDate = this.formatDate(currentDate);
     this.startDate = formattedDate;
+  }
+
+  async onYearChange(event: any) {
+    this.selectedYear = event.detail.value;
+    await this.chargeInformation();
   }
 
 }

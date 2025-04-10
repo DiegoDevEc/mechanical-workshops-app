@@ -1,97 +1,107 @@
 <ion-header>
   <ion-grid style="margin-top: 20px;">
     <ion-row>
-      <ion-col size="12" v>
+      <ion-col size="12">
         <ion-title>Dashboard</ion-title>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen="true">
+
   <ion-grid>
+
     <ion-row>
+      <!-- Fecha Inicial -->
       <ion-col size="6">
-        <ion-card class="citas-agendadas">
-          <ion-card-header>
-            <ion-card-title>Citas Agendadas</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            25
-          </ion-card-content>
-        </ion-card>
+        <ion-item>
+          <ion-label class="small-label">Desde:</ion-label>
+          <ion-text (click)="openModal(datetimeModalStart)" class="small-text-content">
+            {{ startDate ? (startDate | date: 'yyyy-MM-dd') : 'Seleccionar' }}
+          </ion-text>
+        </ion-item>
+        <ion-modal #datetimeModalStart>
+          <ng-template>
+            <ion-datetime id="datetime-finish" presentation="date"
+              (ionChange)="onStartDateChange($event); closeModal(datetimeModalStart)"
+              [showClearButton]="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
       </ion-col>
+
+      <!-- Fecha Final -->
       <ion-col size="6">
-        <ion-card class="clientes">
-          <ion-card-header>
-            <ion-card-title>Número de Clientes</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            120
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6">
-        <ion-card class="ventas">
-          <ion-card-header>
-            <ion-card-title>Total Ventas</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            $15,000
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-col size="6">
-        <ion-card class="citas-concretadas">
-          <ion-card-header>
-            <ion-card-title>Citas Concretadas</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            18
-          </ion-card-content>
-        </ion-card>
+        <ion-item>
+          <ion-label class="small-label">Hasta:</ion-label>
+          <ion-text (click)="openModal(datetimeModalFinish)" class="small-text-content">
+            {{ endDate ? (endDate | date: 'yyyy-MM-dd') : 'Seleccionar' }}
+          </ion-text>
+        </ion-item>
+        <ion-modal #datetimeModalFinish>
+          <ng-template>
+            <ion-datetime id="datetime-finish" presentation="date"
+              (ionChange)="onEndDateChange($event); closeModal(datetimeModalFinish)"
+              [showClearButton]="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <!-- Lista de últimas citas -->
-  <ion-list>
-    <ion-list-header>
-      <ion-label>Últimas Citas</ion-label>
-    </ion-list-header>
+  <ion-grid>
 
-    <ion-item>
-      <ion-label>
-        <h2>10:00 AM</h2>
-        <p>Juan Pérez</p>
-      </ion-label>
-      <ion-badge color="success">Concretada</ion-badge>
-    </ion-item>
+    <ion-row>
+      <ion-col size="12">
+        <h2>Resumen</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div style="display: block;">
+          <canvas baseChart #doughnutChartAdmin="base-chart" [data]="citaChartData" [type]="citaChartType"
+            [options]="citaChartOptions">
+          </canvas>
+        </div>
+      </ion-col>
+    </ion-row>
+    <div style="height: 50px;">
+    </div>
+    <ion-row>
+      <ion-col size="12">
+        <h2>Finalizadas por mes</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <!-- Select de Año -->
+        <ion-item>
+          <ion-label position="stacked">Año</ion-label>
+          <ion-select [(ngModel)]="selectedYear" (ionChange)="onYearChange($event)">
+            <ion-select-option *ngFor="let year of years" [value]="year">{{ year }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div style="display: block;">
+          <canvas baseChart #lineChartAdmin="base-chart" [data]="pieChartData" [type]="pieChartType">
+          </canvas>
+        </div>
+      </ion-col>
+    </ion-row>
 
-    <ion-item>
-      <ion-label>
-        <h2>11:30 AM</h2>
-        <p>María Gómez</p>
-      </ion-label>
-      <ion-badge color="warning">Pendiente</ion-badge>
-    </ion-item>
+    <ion-list>
+      <ion-item *ngFor="let item of dataList">
+        <ion-label>
+          {{ item.mes | titlecase }}: {{ item.cantidad }}
+        </ion-label>
+      </ion-item>
+    </ion-list>
 
-    <ion-item>
-      <ion-label>
-        <h2>02:00 PM</h2>
-        <p>Carlos López</p>
-      </ion-label>
-      <ion-badge color="danger">Cancelada</ion-badge>
-    </ion-item>
+    <div style="height: 50px;">
+    </div>
+  </ion-grid>
 
-    <ion-item>
-      <ion-label>
-        <h2>04:00 PM</h2>
-        <p>Ana Martínez</p>
-      </ion-label>
-      <ion-badge color="success">Concretada</ion-badge>
-    </ion-item>
-  </ion-list>
 </ion-content>
