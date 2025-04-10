@@ -9,45 +9,77 @@
 </ion-header>
 
 <ion-content fullscreen="true">
+
   <ion-grid>
 
     <ion-row>
-      <ion-col size="12">
-        <div style="display: block;">
-          <canvas baseChart [data]="citaChartData" [type]="citaChartType">
-          </canvas>
-        </div>
+      <!-- Fecha Inicial -->
+      <ion-col size="6">
+        <ion-item>
+          <ion-label class="small-label">Desde:</ion-label>
+          <ion-text (click)="openModal(datetimeModalStart)" class="small-text-content">
+            {{ startDate ? (startDate | date: 'yyyy-MM-dd') : 'Seleccionar' }}
+          </ion-text>
+        </ion-item>
+        <ion-modal #datetimeModalStart>
+          <ng-template>
+            <ion-datetime id="datetime-finish" presentation="date"
+              (ionChange)="onStartDateChange($event); closeModal(datetimeModalStart)"
+              [showClearButton]="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
       </ion-col>
-    </ion-row>
 
-    <ion-row>
-      <ion-col size="12">
-        <div style="display: block;">
-          <canvas baseChart [data]="pieChartData" [type]="pieChartType">
-          </canvas>
-        </div>
-      </ion-col>
-    </ion-row>
-
-
-    <ion-row>
-      <ion-col size="12">
-        <div style="display: block;">
-          <canvas baseChart [data]="citaChartData" [type]="citaChartType">
-          </canvas>
-        </div>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="12">
-        <div style="display: block;">
-          <canvas baseChart [data]="pieChartData" [type]="pieChartType">
-          </canvas>
-        </div>
+      <!-- Fecha Final -->
+      <ion-col size="6">
+        <ion-item>
+          <ion-label class="small-label">Hasta:</ion-label>
+          <ion-text (click)="openModal(datetimeModalFinish)" class="small-text-content">
+            {{ endDate ? (endDate | date: 'yyyy-MM-dd') : 'Seleccionar' }}
+          </ion-text>
+        </ion-item>
+        <ion-modal #datetimeModalFinish>
+          <ng-template>
+            <ion-datetime id="datetime-finish" presentation="date"
+              (ionChange)="onEndDateChange($event); closeModal(datetimeModalFinish)"
+              [showClearButton]="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
       </ion-col>
     </ion-row>
   </ion-grid>
 
+  <ion-grid>
+
+    <ion-row>
+      <ion-col size="12">
+        <h2>Resumen</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div style="display: block;">
+          <canvas baseChart #baseChart="base-chart" [data]="citaChartData" [type]="citaChartType"
+          [options]="citaChartOptions">
+          </canvas>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <h2>Finalizadas</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div style="display: block;">
+          <canvas baseChart [data]="pieChartData" [type]="pieChartType">
+          </canvas>
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+  </ion-grid>
 
 </ion-content>
