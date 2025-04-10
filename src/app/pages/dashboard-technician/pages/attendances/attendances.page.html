@@ -108,7 +108,7 @@
       <ion-item-options side="start">
         <!-- Finalizar mantenimiento (como está, ícono de engranaje) -->
         <ion-item-option class="bottom-controls-primary"
-          *ngIf="attendance.status === 'ASSIGN' || attendance.status === 'PROGRESS'"
+          *ngIf="attendance.status === 'PROGRESS'"
           (click)="updateAttendances(attendance)">
           <ion-icon slot="icon-only" name="checkmark-done-circle"></ion-icon>
         </ion-item-option>

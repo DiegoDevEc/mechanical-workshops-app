@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { HomeTechnicianPageRoutingModule } from './home-technician-routing.module';
 
 import { HomeTechnicianPage } from './home-technician.page';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    NgChartsModule,
     HomeTechnicianPageRoutingModule
   ],
   declarations: [HomeTechnicianPage]

@@ -35,8 +35,8 @@ export class AttendancesService {
   }
 
   getAttendancesByTechnical(technicianId: string, page: number, size: number, text: string) {
-    const urlLocal = text ? `${this.apiUrl}/attendances/all-by-technical-assigned?technicianId=${technicianId}&page=${page}&size=${size}&status=${text}` :
-     `${this.apiUrl}/attendances/all-by-technical-assigned?technicianId=${technicianId}&page=${page}&size=${size}`;
+    const urlLocal = text ? `${this.apiUrl}/attendances/all-by-technical?technicianId=${technicianId}&page=${page}&size=${size}&status=${text}` :
+     `${this.apiUrl}/attendances/all-by-technical?technicianId=${technicianId}&page=${page}&size=${size}`;
     return this.http.get(urlLocal);
   }
 
